@@ -1,2 +1,2 @@
 # Cassiopeia
-A open source BitTorrent client
+A open source BitTorrent client written in C#
