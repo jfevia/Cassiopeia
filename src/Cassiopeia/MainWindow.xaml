@@ -110,223 +110,9 @@
                 </DataTemplate>
             </xcad:DockingManager.DocumentHeaderTemplate>
             <xcad:LayoutRoot>
-                <xcad:LayoutPanel Orientation="Vertical">
-                    <xcad:LayoutDocumentPaneGroup>
-                        <xcad:LayoutDocumentPane>
-                            <xcad:LayoutDocument Title="Session"
-                                                 CanClose="False"
-                                                 ContentId="session">
-                                <DataGrid>
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="#" />
-                                        <DataGridTextColumn Header="Name" />
-                                        <DataGridTextColumn Header="Size" />
-                                        <DataGridTextColumn Header="Progress" />
-                                        <DataGridTextColumn Header="Down Speed" />
-                                        <DataGridTextColumn Header="Up Speed" />
-                                        <DataGridTextColumn Header="ETA" />
-                                        <DataGridTextColumn Header="Seeds" />
-                                        <DataGridTextColumn Header="Peers" />
-                                        <DataGridTextColumn Header="Uploaded" />
-                                        <DataGridTextColumn Header="Ratio" />
-                                        <DataGridTextColumn Header="Added Date" />
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </xcad:LayoutDocument>
-                        </xcad:LayoutDocumentPane>
-                    </xcad:LayoutDocumentPaneGroup>
-                    <xcad:LayoutAnchorablePane DockMinHeight="200">
-                        <xcad:LayoutAnchorable Title="Status"
-                                               ContentId="status">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <ProgressBar Grid.Row="0"
-                                             Grid.Column="0"
-                                             Grid.ColumnSpan="8"
-                                             Height="30"
-                                             Maximum="100"
-                                             Minimum="0"
-                                             Value="23" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="0"
-                                       Content="Downloaded" />
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="1"
-                                           Text="3.12 GiB (900.28 MiB)" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="2"
-                                       Content="Uploaded" />
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="3"
-                                           Text="823 MiB (62.53 MiB)" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="4"
-                                       Content="Seeders" />
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="5"
-                                           Text="123 (468)" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="6"
-                                       Content="Peers" />
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="7"
-                                           Text="7 (47)" />
-                                <Label Grid.Row="2"
-                                       Grid.Column="0"
-                                       Content="Down Speed" />
-                                <TextBlock Grid.Row="2"
-                                           Grid.Column="1"
-                                           Text="829.28 KiB" />
-                                <Label Grid.Row="2"
-                                       Grid.Column="2"
-                                       Content="Up Speed" />
-                                <TextBlock Grid.Row="2"
-                                           Grid.Column="3"
-                                           Text="2.21 KiB" />
-                                <Label Grid.Row="2"
-                                       Grid.Column="4"
-                                       Content="Active Time" />
-                                <TextBlock Grid.Row="2"
-                                           Grid.Column="5"
-                                           Text="1h 38m" />
-                                <Label Grid.Row="2"
-                                       Grid.Column="6"
-                                       Content="ETA" />
-                                <TextBlock Grid.Row="2"
-                                           Grid.Column="7"
-                                           Text="52m 13s" />
-                                <Label Grid.Row="3"
-                                       Grid.Column="0"
-                                       Content="Share Ratio" />
-                                <TextBlock Grid.Row="3"
-                                           Grid.Column="1"
-                                           Text="0.239" />
-                                <Label Grid.Row="3"
-                                       Grid.Column="2"
-                                       Content="Pieces" />
-                                <TextBlock Grid.Row="3"
-                                           Grid.Column="3"
-                                           Text="976 (2.0 MiB)" />
-                                <Label Grid.Row="3"
-                                       Grid.Column="4"
-                                       Content="Status" />
-                                <TextBlock Grid.Row="3"
-                                           Grid.Column="5"
-                                           Text="Paused" />
-                                <Label Grid.Row="3"
-                                       Grid.Column="6"
-                                       Content="Date Added" />
-                                <TextBlock Grid.Row="3"
-                                           Grid.Column="7"
-                                           Text="28 Dec 2016" />
-                            </Grid>
-                        </xcad:LayoutAnchorable>
-                        <xcad:LayoutAnchorable Title="Details"
-                                               ContentId="details">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Row="0"
-                                       Grid.Column="0"
-                                       Content="Name" />
-                                <TextBlock Grid.Row="0"
-                                           Grid.Column="1"
-                                           Text="Ubuntu.iso" />
-                                <Label Grid.Row="0"
-                                       Grid.Column="2"
-                                       Content="Hash" />
-                                <TextBlock Grid.Row="0"
-                                           Grid.Column="3"
-                                           Text="37aa865097a7b436771084d84f0b85d002825d21" />
-                                <Label Grid.Row="0"
-                                       Grid.Column="4"
-                                       Content="Path" />
-                                <TextBlock Grid.Row="0"
-                                           Grid.Column="5"
-                                           Text="C:\Users\Cassiopeia\Downloads" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="0"
-                                       Content="Total Size" />
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="1"
-                                           Text="1.87 GiB" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="2"
-                                       Content="No. of files" />
-                                <TextBlock Grid.Row="1"
-                                           Grid.Column="3"
-                                           Text="8" />
-                            </Grid>
-                        </xcad:LayoutAnchorable>
-                        <xcad:LayoutAnchorable Title="Trackers"
-                                               ContentId="trackers">
-                            <DataGrid>
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" />
-                                    <DataGridTextColumn Header="Status" />
-                                    <DataGridTextColumn Header="Seeders" />
-                                    <DataGridTextColumn Header="Peers" />
-                                    <DataGridTextColumn Header="Downloaded" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </xcad:LayoutAnchorable>
-                        <xcad:LayoutAnchorable Title="Files"
-                                               ContentId="files">
-                            <DataGrid>
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" />
-                                    <DataGridTextColumn Header="Size" />
-                                    <DataGridTextColumn Header="Progress" />
-                                    <DataGridTextColumn Header="Priority" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </xcad:LayoutAnchorable>
-                        <xcad:LayoutAnchorable Title="Peers"
-                                               ContentId="peers">
-                            <DataGrid>
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Country" />
-                                    <DataGridTextColumn Header="Flow" />
-                                    <DataGridTextColumn Header="Address" />
-                                    <DataGridTextColumn Header="Client" />
-                                    <DataGridTextColumn Header="Progress" />
-                                    <DataGridTextColumn Header="Downloaded" />
-                                    <DataGridTextColumn Header="Uploaded" />
-                                    <DataGridTextColumn Header="Down Speed" />
-                                    <DataGridTextColumn Header="Up Speed" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </xcad:LayoutAnchorable>
-                    </xcad:LayoutAnchorablePane>
-                </xcad:LayoutPanel>
-                <xcad:LayoutRoot.LeftSide>
-                    <xcad:LayoutAnchorSide>
-                        <xcad:LayoutAnchorGroup>
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutPanel DockMinWidth="200">
+                        <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="Session Explorer"
                                                    ContentId="session-explorer">
                                 <TextBlock Margin="10"
@@ -335,9 +121,223 @@
                                            Text="Agenda Content"
                                            TextWrapping="Wrap" />
                             </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorGroup>
-                    </xcad:LayoutAnchorSide>
-                </xcad:LayoutRoot.LeftSide>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutPanel>
+                    <xcad:LayoutPanel Orientation="Vertical">
+                        <xcad:LayoutDocumentPaneGroup>
+                            <xcad:LayoutDocumentPane>
+                                <xcad:LayoutDocument Title="Session"
+                                                     CanClose="False"
+                                                     ContentId="session">
+                                    <DataGrid>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="#" />
+                                            <DataGridTextColumn Header="Name" />
+                                            <DataGridTextColumn Header="Size" />
+                                            <DataGridTextColumn Header="Progress" />
+                                            <DataGridTextColumn Header="Down Speed" />
+                                            <DataGridTextColumn Header="Up Speed" />
+                                            <DataGridTextColumn Header="ETA" />
+                                            <DataGridTextColumn Header="Seeds" />
+                                            <DataGridTextColumn Header="Peers" />
+                                            <DataGridTextColumn Header="Uploaded" />
+                                            <DataGridTextColumn Header="Ratio" />
+                                            <DataGridTextColumn Header="Added Date" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </xcad:LayoutDocument>
+                            </xcad:LayoutDocumentPane>
+                        </xcad:LayoutDocumentPaneGroup>
+                        <xcad:LayoutAnchorablePane DockMinHeight="200">
+                            <xcad:LayoutAnchorable Title="Status"
+                                                   ContentId="status">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ProgressBar Grid.Row="0"
+                                                 Grid.Column="0"
+                                                 Grid.ColumnSpan="8"
+                                                 Height="30"
+                                                 Maximum="100"
+                                                 Minimum="0"
+                                                 Value="23" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="0"
+                                           Content="Downloaded" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="3.12 GiB (900.28 MiB)" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="2"
+                                           Content="Uploaded" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="3"
+                                               Text="823 MiB (62.53 MiB)" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="4"
+                                           Content="Seeders" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="5"
+                                               Text="123 (468)" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="6"
+                                           Content="Peers" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="7"
+                                               Text="7 (47)" />
+                                    <Label Grid.Row="2"
+                                           Grid.Column="0"
+                                           Content="Down Speed" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="1"
+                                               Text="829.28 KiB" />
+                                    <Label Grid.Row="2"
+                                           Grid.Column="2"
+                                           Content="Up Speed" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="3"
+                                               Text="2.21 KiB" />
+                                    <Label Grid.Row="2"
+                                           Grid.Column="4"
+                                           Content="Active Time" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="5"
+                                               Text="1h 38m" />
+                                    <Label Grid.Row="2"
+                                           Grid.Column="6"
+                                           Content="ETA" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="7"
+                                               Text="52m 13s" />
+                                    <Label Grid.Row="3"
+                                           Grid.Column="0"
+                                           Content="Share Ratio" />
+                                    <TextBlock Grid.Row="3"
+                                               Grid.Column="1"
+                                               Text="0.239" />
+                                    <Label Grid.Row="3"
+                                           Grid.Column="2"
+                                           Content="Pieces" />
+                                    <TextBlock Grid.Row="3"
+                                               Grid.Column="3"
+                                               Text="976 (2.0 MiB)" />
+                                    <Label Grid.Row="3"
+                                           Grid.Column="4"
+                                           Content="Status" />
+                                    <TextBlock Grid.Row="3"
+                                               Grid.Column="5"
+                                               Text="Paused" />
+                                    <Label Grid.Row="3"
+                                           Grid.Column="6"
+                                           Content="Date Added" />
+                                    <TextBlock Grid.Row="3"
+                                               Grid.Column="7"
+                                               Text="28 Dec 2016" />
+                                </Grid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Details"
+                                                   ContentId="details">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0"
+                                           Grid.Column="0"
+                                           Content="Name" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="1"
+                                               Text="Ubuntu.iso" />
+                                    <Label Grid.Row="0"
+                                           Grid.Column="2"
+                                           Content="Hash" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="3"
+                                               Text="37aa865097a7b436771084d84f0b85d002825d21" />
+                                    <Label Grid.Row="0"
+                                           Grid.Column="4"
+                                           Content="Path" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="5"
+                                               Text="C:\Users\Cassiopeia\Downloads" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="0"
+                                           Content="Total Size" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="1.87 GiB" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="2"
+                                           Content="No. of files" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="3"
+                                               Text="8" />
+                                </Grid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Trackers"
+                                                   ContentId="trackers">
+                                <DataGrid>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" />
+                                        <DataGridTextColumn Header="Status" />
+                                        <DataGridTextColumn Header="Seeders" />
+                                        <DataGridTextColumn Header="Peers" />
+                                        <DataGridTextColumn Header="Downloaded" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Files"
+                                                   ContentId="files">
+                                <DataGrid>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" />
+                                        <DataGridTextColumn Header="Size" />
+                                        <DataGridTextColumn Header="Progress" />
+                                        <DataGridTextColumn Header="Priority" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Peers"
+                                                   ContentId="peers">
+                                <DataGrid>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Country" />
+                                        <DataGridTextColumn Header="Flow" />
+                                        <DataGridTextColumn Header="Address" />
+                                        <DataGridTextColumn Header="Client" />
+                                        <DataGridTextColumn Header="Progress" />
+                                        <DataGridTextColumn Header="Downloaded" />
+                                        <DataGridTextColumn Header="Uploaded" />
+                                        <DataGridTextColumn Header="Down Speed" />
+                                        <DataGridTextColumn Header="Up Speed" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutPanel>
+                </xcad:LayoutPanel>
             </xcad:LayoutRoot>
         </xcad:DockingManager>
         <StatusBar Grid.Row="2">
