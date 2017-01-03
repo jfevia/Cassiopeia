@@ -127,7 +127,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cassiopeia.BitTorrent\Cassiopeia.BitTorrent.csproj">
+      <Project>{40bd5dfb-f5f0-4a1a-8661-5b95e0bb540b}</Project>
+      <Name>Cassiopeia.BitTorrent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
