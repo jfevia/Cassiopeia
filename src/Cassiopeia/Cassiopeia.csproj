@@ -86,6 +86,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\AddTorrentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,6 +97,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Converters\FileTypeImageConverter.cs" />
+    <Compile Include="Models\FileType.cs" />
+    <Compile Include="Models\SessionCategory.cs" />
+    <Compile Include="Models\Sessions.cs" />
+    <Compile Include="Models\Torrent.cs" />
+    <Compile Include="Services\WindowService.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\AddTorrentWindow.xaml.cs">
+      <DependentUpon>AddTorrentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -126,14 +141,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Cassiopeia.BitTorrent\Cassiopeia.BitTorrent.csproj">
       <Project>{40bd5dfb-f5f0-4a1a-8661-5b95e0bb540b}</Project>
       <Name>Cassiopeia.BitTorrent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cassiopeia.Windows.Controls\Cassiopeia.Windows.Controls.csproj">
+      <Project>{ca26c4e9-e353-4ef1-831d-b907b176e278}</Project>
+      <Name>Cassiopeia.Windows.Controls</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

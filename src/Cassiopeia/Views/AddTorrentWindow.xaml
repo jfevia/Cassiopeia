@@ -1,0 +1,343 @@
+﻿<Window x:Class="Cassiopeia.Views.AddTorrentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cassiopeia="http://schemas.cassiopeia.com/wpf/xaml/controls"
+        xmlns:converters="clr-namespace:Cassiopeia.Converters"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Cassiopeia.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="Add Torrents"
+        Width="550"
+        Height="500"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <converters:FileTypeImageConverter x:Key="FileTypeImageConverter" />
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <xcad:DockingManager Grid.Row="0"
+                             Grid.Column="0"
+                             AllowMixedOrientation="True"
+                             BorderBrush="Black"
+                             BorderThickness="1">
+            <xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Margin="0,0,4,0"
+                               Source="{Binding IconSource}" />
+                        <TextBlock Text="{Binding Title}" />
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentHeaderTemplate>
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel>
+                    <xcad:LayoutPanel Orientation="Vertical">
+                        <xcad:LayoutDocumentPaneGroup>
+                            <xcad:LayoutDocumentPane>
+                                <xcad:LayoutDocument Title="Torrents"
+                                                     CanClose="False"
+                                                     ContentId="torrents">
+                                    <DataGrid>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="#" />
+                                            <DataGridTextColumn Header="Name" />
+                                            <DataGridTextColumn Header="Download Size" />
+                                            <DataGridTextColumn Header="Original Size" />
+                                            <DataGridTextColumn Header="Piece Size" />
+                                            <DataGridTextColumn Header="Author" />
+                                            <DataGridTextColumn Header="Comment" />
+                                            <DataGridTextColumn Header="Date" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </xcad:LayoutDocument>
+                            </xcad:LayoutDocumentPane>
+                        </xcad:LayoutDocumentPaneGroup>
+                        <xcad:LayoutAnchorablePane DockMinHeight="230">
+                            <xcad:LayoutAnchorable Title="General"
+                                                   IsSelected="True">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <GroupBox Grid.Row="0"
+                                              Grid.Column="0"
+                                              Header="Settings">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Row="0"
+                                                      Grid.Column="0"
+                                                      Margin="2,3"
+                                                      Content="Skip Hash Check" />
+                                            <CheckBox Grid.Row="0"
+                                                      Grid.Column="1"
+                                                      Margin="2,3"
+                                                      Content="Initial Seeding" />
+                                            <CheckBox Grid.Row="1"
+                                                      Grid.Column="0"
+                                                      Margin="2,3"
+                                                      Content="Start Torrent" />
+                                            <CheckBox Grid.Row="1"
+                                                      Grid.Column="1"
+                                                      Margin="2,3"
+                                                      Content="Peer Exchange" />
+                                            <CheckBox Grid.Row="2"
+                                                      Grid.Column="0"
+                                                      Margin="2,3"
+                                                      Content="Enable DHT" />
+                                            <CheckBox Grid.Row="2"
+                                                      Grid.Column="1"
+                                                      Margin="2,3"
+                                                      Content="Local Peer Discovery" />
+                                        </Grid>
+                                    </GroupBox>
+                                    <GroupBox Grid.Row="1"
+                                              Grid.Column="0"
+                                              Header="Session &amp; Queue">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Margin="2,3"
+                                                   Content="Initial Position" />
+                                            <ComboBox Grid.Row="0"
+                                                      Grid.Column="1"
+                                                      Margin="2,3"
+                                                      VerticalAlignment="Center" />
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="0"
+                                                   Margin="2,3"
+                                                   Content="Category" />
+                                            <ComboBox Grid.Row="1"
+                                                      Grid.Column="1"
+                                                      Margin="2,3"
+                                                      VerticalAlignment="Center" />
+                                        </Grid>
+                                    </GroupBox>
+                                </Grid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Storage">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0"
+                                           Grid.Column="0"
+                                           Content="Download folder" />
+                                    <ComboBox Grid.Row="1"
+                                              Grid.Column="0"
+                                              Grid.ColumnSpan="2"
+                                              Margin="20,3,2,3"
+                                              VerticalAlignment="Center"
+                                              IsEditable="True" />
+                                    <Button Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="2,3"
+                                            VerticalAlignment="Center">
+                                        <Button.Content>
+                                            <Label Margin="0"
+                                                   Padding="1"
+                                                   Content="Browse..." />
+                                        </Button.Content>
+                                    </Button>
+                                    <CheckBox Grid.Row="2"
+                                              Grid.Column="0"
+                                              Content="Move completed download" />
+                                    <ComboBox Grid.Row="3"
+                                              Grid.Column="0"
+                                              Grid.ColumnSpan="2"
+                                              Margin="20,2,3,2"
+                                              VerticalAlignment="Center"
+                                              IsEditable="True" />
+                                    <Button Grid.Row="3"
+                                            Grid.Column="2"
+                                            Margin="2,3"
+                                            VerticalAlignment="Center">
+                                        <Button.Content>
+                                            <Label Margin="0"
+                                                   Padding="1"
+                                                   Content="Browse..." />
+                                        </Button.Content>
+                                    </Button>
+                                </Grid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Bandwidth">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto"
+                                                          MinWidth="150" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0"
+                                           Grid.Column="0"
+                                           Margin="2,3"
+                                           Content="Maximum download rate (kB/s)" />
+                                    <xctk:IntegerUpDown Grid.Row="0"
+                                                        Grid.Column="1"
+                                                        Margin="2,3"
+                                                        VerticalAlignment="Center"
+                                                        Minimum="0" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="0"
+                                           Margin="2,3"
+                                           Content="Maximum upload rate (kB/s)" />
+                                    <xctk:IntegerUpDown Grid.Row="1"
+                                                        Grid.Column="1"
+                                                        Margin="2,3"
+                                                        VerticalAlignment="Center"
+                                                        Minimum="0" />
+                                    <Label Grid.Row="2"
+                                           Grid.Column="0"
+                                           Margin="2,3"
+                                           Content="Maximum connected peers" />
+                                    <xctk:IntegerUpDown Grid.Row="2"
+                                                        Grid.Column="1"
+                                                        Margin="2,3"
+                                                        VerticalAlignment="Center"
+                                                        Minimum="0" />
+                                    <Label Grid.Row="3"
+                                           Grid.Column="0"
+                                           Margin="2,3"
+                                           Content="Number of upload slots" />
+                                    <xctk:IntegerUpDown Grid.Row="3"
+                                                        Grid.Column="1"
+                                                        Margin="2,3"
+                                                        VerticalAlignment="Center"
+                                                        Minimum="0" />
+                                    <CheckBox Grid.Row="4"
+                                              Grid.Column="0"
+                                              Margin="20,3,2,3"
+                                              Content="Use additional slots if upload speed percent is below" />
+                                    <xctk:IntegerUpDown Grid.Row="4"
+                                                        Grid.Column="1"
+                                                        Margin="2,3"
+                                                        VerticalAlignment="Center"
+                                                        Maximum="100"
+                                                        Minimum="0" />
+                                </Grid>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Files">
+                                <cassiopeia:TreeListView>
+                                    <cassiopeia:TreeListView.Resources>
+                                        <DataTemplate x:Key="TreeListViewHeaderTemplate">
+                                            <TextBlock Margin="5,3"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding}" />
+                                        </DataTemplate>
+                                        <Style TargetType="GridViewColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </cassiopeia:TreeListView.Resources>
+                                    <cassiopeia:TreeListView.View>
+                                        <GridView>
+                                            <GridView.Columns>
+                                                <GridViewColumn Header="Name"
+                                                                HeaderTemplate="{StaticResource TreeListViewHeaderTemplate}">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <cassiopeia:RowExpander />
+                                                                <Image Margin="0,0,5,0"
+                                                                       Source="{Binding Converter={StaticResource FileTypeImageConverter}}" />
+                                                                <TextBlock Text="{Binding Name}" />
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Size}"
+                                                                Header="Size"
+                                                                HeaderTemplate="{StaticResource TreeListViewHeaderTemplate}" />
+                                                <GridViewColumn DisplayMemberBinding="{Binding DownloadPriority}"
+                                                                Header="Download Priority"
+                                                                HeaderTemplate="{StaticResource TreeListViewHeaderTemplate}" />
+                                            </GridView.Columns>
+                                        </GridView>
+                                    </cassiopeia:TreeListView.View>
+                                </cassiopeia:TreeListView>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Trackers">
+                                <DataGrid>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="#" />
+                                        <DataGridTextColumn Header="Address" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutPanel>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              HorizontalAlignment="Right"
+              IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Dialog" />
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Dialog" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Center">
+                <Button.Content>
+                    <Label Padding="25,3"
+                           Content="OK" />
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,10,0,0"
+                    VerticalAlignment="Center">
+                <Button.Content>
+                    <Label Padding="25,3"
+                           Content="Cancel" />
+                </Button.Content>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
