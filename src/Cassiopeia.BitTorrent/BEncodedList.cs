@@ -53,7 +53,10 @@ namespace Cassiopeia.BitTorrent
             List.CopyTo(array, arrayIndex);
         }
 
-        public int Count => List.Count;
+        public int Count
+        {
+            get { return List.Count; }
+        }
 
         public int IndexOf(BEncodedValue item)
         {
@@ -65,7 +68,10 @@ namespace Cassiopeia.BitTorrent
             List.Insert(index, item);
         }
 
-        public bool IsReadOnly => false;
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
         public bool Remove(BEncodedValue item)
         {

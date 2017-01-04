@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Cassiopeia.BitTorrent
 {
     public interface IBEncodedValue

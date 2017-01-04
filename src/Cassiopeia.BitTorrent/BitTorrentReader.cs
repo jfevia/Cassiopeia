@@ -15,13 +15,25 @@ namespace Cassiopeia.BitTorrent
             _peekedData = new byte[1];
         }
 
-        public override bool CanRead => _stream.CanRead;
+        public override bool CanRead
+        {
+            get { return _stream.CanRead; }
+        }
 
-        public override bool CanSeek => _stream.CanSeek;
+        public override bool CanSeek
+        {
+            get { return _stream.CanSeek; }
+        }
 
-        public override bool CanWrite => false;
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
 
-        public override long Length => _stream.Length;
+        public override long Length
+        {
+            get { return _stream.Length; }
+        }
 
         public override long Position
         {

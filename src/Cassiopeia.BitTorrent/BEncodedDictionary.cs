@@ -52,9 +52,15 @@ namespace Cassiopeia.BitTorrent
             Dictionary.CopyTo(array, arrayIndex);
         }
 
-        public int Count => Dictionary.Count;
+        public int Count
+        {
+            get { return Dictionary.Count; }
+        }
 
-        public bool IsReadOnly => false;
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
         public bool Remove(BEncodedString key)
         {
@@ -93,9 +99,15 @@ namespace Cassiopeia.BitTorrent
             set { Dictionary[key] = value; }
         }
 
-        public ICollection<BEncodedString> Keys => Dictionary.Keys;
+        public ICollection<BEncodedString> Keys
+        {
+            get { return Dictionary.Keys; }
+        }
 
-        public ICollection<BEncodedValue> Values => Dictionary.Values;
+        public ICollection<BEncodedValue> Values
+        {
+            get { return Dictionary.Values; }
+        }
 
         public IEnumerator<KeyValuePair<BEncodedString, BEncodedValue>> GetEnumerator()
         {

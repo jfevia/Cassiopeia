@@ -29,7 +29,6 @@
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Select All" />
-                <Separator />
             </MenuItem>
             <MenuItem Header="Queue">
                 <MenuItem Header="Sort by">

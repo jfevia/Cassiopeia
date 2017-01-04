@@ -29,7 +29,10 @@ namespace Cassiopeia.BitTorrent
             TextBytes = value;
         }
 
-        public string Text => Encoding.UTF8.GetString(TextBytes);
+        public string Text
+        {
+            get { return Encoding.UTF8.GetString(TextBytes); }
+        }
 
         public byte[] TextBytes
         {
@@ -41,7 +44,10 @@ namespace Cassiopeia.BitTorrent
             }
         }
 
-        public string Hex => BitConverter.ToString(TextBytes);
+        public string Hex
+        {
+            get { return BitConverter.ToString(TextBytes); }
+        }
 
         public int CompareTo(BEncodedString other)
         {
