@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Input;
 using Cassiopeia.BitTorrent;
 using Cassiopeia.Models;
@@ -25,12 +23,12 @@ namespace Cassiopeia.ViewModels
         public void ShowOpenFileDialog()
         {
             var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Torrent Files (*.torrent)|*.torrent|All files (*.*)|*.*";
+
             if (openFileDialog.ShowDialog() == true)
             {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                BEncode.Decode(File.ReadAllBytes(openFileDialog.FileName));
-                Console.WriteLine($"File read completed in {stopwatch.Elapsed}");
+                var bEncode = BEncode.Decode(File.ReadAllBytes(openFileDialog.FileName));
+                // TODO: Process bEncode
             }
         }
 
