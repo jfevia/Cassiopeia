@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Cassiopeia.BitTorrent
 {
-    public class BEncode
+    public static class BEncode
     {
         public static BEncodedValue Decode(byte[] data)
         {
