@@ -155,8 +155,9 @@
                                             <DataGridTextColumn Binding="{Binding DownloadSpeed}" Header="Down Speed" IsReadOnly="True" />
                                             <DataGridTextColumn Binding="{Binding UploadSpeed}" Header="Up Speed" IsReadOnly="True" />
                                             <DataGridTextColumn Binding="{Binding Eta}" Header="ETA" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Seeds}" Header="Seeds" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Peers}" Header="Peers" IsReadOnly="True" />
+                                            <DataGridTextColumn Binding="{Binding SeedCount}" Header="Seeds" IsReadOnly="True" />
+                                            <DataGridTextColumn Binding="{Binding PeerCount}" Header="Peers" IsReadOnly="True" />
+                                            <DataGridTextColumn Binding="{Binding FileCount}" Header="Files" IsReadOnly="True" />
                                             <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
                                             <DataGridTextColumn Binding="{Binding Uploaded}" Header="Uploaded" IsReadOnly="True" />
                                             <DataGridTextColumn Binding="{Binding Ratio}" Header="Ratio" IsReadOnly="True" />
