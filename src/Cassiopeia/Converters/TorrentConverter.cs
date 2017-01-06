@@ -12,7 +12,7 @@ namespace Cassiopeia.Converters
                 throw new ArgumentNullException(nameof(value));
             
             if (!(value is BEncodedDictionary))
-                throw new ArgumentException($"Invalid BEncode object. Expected to {nameof(BEncodedDictionary)}");
+                throw new ArgumentException($"Invalid BEncode object. Expected root {nameof(BEncodedDictionary)} value");
 
             var torrent = new Torrent();
             var dictionary = (BEncodedDictionary) value;
@@ -29,9 +29,6 @@ namespace Cassiopeia.Converters
             if (dictionary.ContainsKey("creation date"))
                 torrent.CreationDate = ((BEncodedNumber) dictionary["creation date"]).Number;
 
-            if (dictionary.ContainsKey("announce"))
-                torrent.Trackers.Add(((BEncodedString) dictionary["announce"]).Text);
-
             if (dictionary.ContainsKey("announce-list"))
             {
                 var announceList = (BEncodedList) dictionary["announce-list"];
@@ -40,9 +37,12 @@ namespace Cassiopeia.Converters
                     var announceItemList = (BEncodedList) announceItem;
 
                     foreach (var announce in announceItemList)
-                        torrent.Trackers.Add(((BEncodedString) announce).Text);
+                        torrent.AddTracker(new Tracker(((BEncodedString)announce).Text));
                 }
             }
+
+            if (dictionary.ContainsKey("announce"))
+                torrent.AddTracker(new Tracker(((BEncodedString)dictionary["announce"]).Text));
 
             if (dictionary.ContainsKey("info"))
             {
@@ -79,7 +79,7 @@ namespace Cassiopeia.Converters
                                 file.Path.Add(((BEncodedString) path).Text);
                         }
 
-                        torrent.Files.Add(file);
+                        torrent.AddFile(file);
                     }
                 }
             }
