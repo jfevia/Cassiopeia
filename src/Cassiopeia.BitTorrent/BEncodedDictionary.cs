@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Cassiopeia.BitTorrent
@@ -45,6 +47,11 @@ namespace Cassiopeia.BitTorrent
         public bool ContainsKey(BEncodedString key)
         {
             return Dictionary.ContainsKey(key);
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return Dictionary.Keys.Any(s => string.Equals(s.Text, key, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public void CopyTo(KeyValuePair<BEncodedString, BEncodedValue>[] array, int arrayIndex)
@@ -97,6 +104,20 @@ namespace Cassiopeia.BitTorrent
         {
             get { return Dictionary[key]; }
             set { Dictionary[key] = value; }
+        }
+
+        public BEncodedValue this[string key]
+        {
+            get
+            {
+                var k = Dictionary.Keys.First(s => string.Equals(s.Text, key, StringComparison.InvariantCultureIgnoreCase));
+                return Dictionary[k];
+            }
+            set
+            {
+                var k = Dictionary.Keys.First(s => string.Equals(s.Text, key, StringComparison.InvariantCultureIgnoreCase));
+                Dictionary[k] = value;
+            }
         }
 
         public ICollection<BEncodedString> Keys

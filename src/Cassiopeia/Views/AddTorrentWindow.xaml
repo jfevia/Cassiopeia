@@ -53,6 +53,7 @@
                 <DataGridTextColumn Header="Piece Size" />
                 <DataGridTextColumn Header="Author" />
                 <DataGridTextColumn Header="Comment" />
+                <DataGridTextColumn Header="Encoding" />
                 <DataGridTextColumn Header="Date" />
             </DataGrid.Columns>
         </DataGrid>
