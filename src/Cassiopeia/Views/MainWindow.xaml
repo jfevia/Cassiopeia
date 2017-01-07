@@ -49,12 +49,12 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Torrent">
-                <MenuItem Header="Show in Folder" />
-                <MenuItem Header="Storage" />
-                <Separator />
                 <MenuItem Header="Start/Resume" />
                 <MenuItem Header="Force Start" />
                 <MenuItem Header="Pause" />
+                <Separator />
+                <MenuItem Header="Show in Folder" />
+                <MenuItem Header="Storage" />
                 <Separator />
                 <MenuItem Header="Options" />
                 <MenuItem Header="Position">
