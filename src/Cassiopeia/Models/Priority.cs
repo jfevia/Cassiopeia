@@ -4,7 +4,7 @@
     {
         Lowest,
         Low,
-        Medium,
+        Normal,
         High,
         Highest
     }
