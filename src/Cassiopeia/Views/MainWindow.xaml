@@ -49,7 +49,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Torrent">
-                <MenuItem Header="Start/Resume" />
+                <MenuItem Command="{Binding StartSelectedTorrentCommand}" Header="Start/Resume" InputGestureText="{Binding StartSelectedTorrentCommand.InputGestureText}" />
                 <MenuItem Header="Force Start" />
                 <MenuItem Header="Pause" />
                 <Separator />
@@ -180,6 +180,29 @@
                   CanUserDeleteRows="False"
                   ItemsSource="{Binding Torrents}"
                   SelectedItem="{Binding SelectedTorrent}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding StartSelectedTorrentCommand}" Header="Start/Resume" InputGestureText="{Binding StartSelectedTorrentCommand.InputGestureText}" />
+                    <MenuItem Header="Force Start" />
+                    <MenuItem Header="Pause" />
+                    <Separator />
+                    <MenuItem Header="Show in Folder" />
+                    <MenuItem Header="Storage" />
+                    <Separator />
+                    <MenuItem Header="Options" />
+                    <MenuItem Header="Position">
+                        <MenuItem Header="Move to Top" />
+                        <MenuItem Header="Move Up" />
+                        <MenuItem Header="Move Down" />
+                        <MenuItem Header="Move to Bottom" />
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Remove" />
+                    <Separator />
+                    <MenuItem Header="Force Verification" />
+                    <MenuItem Header="Trackers" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" IsReadOnly="True">
                     <DataGridTextColumn.Binding>

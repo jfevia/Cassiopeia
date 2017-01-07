@@ -57,6 +57,17 @@ namespace Cassiopeia.ViewModels
             AddTorrentsDialogCommand = new InputGestureCommand(ShowAddTorrentWindow, "Ctrl+N");
             OpenFileCommand = new InputGestureCommand(ShowOpenFileDialog, "Ctrl+O");
             AddTorrentsCommand = new RelayCommand<IDialog>(OnAddTorrents);
+            StartSelectedTorrentCommand = new InputGestureCommand(StartSelectedTorrent, CanExecuteStartSelectedTorrent, "Ctrl+S");
+        }
+
+        private bool CanExecuteStartSelectedTorrent()
+        {
+            return SelectedTorrent != null && SelectedTorrent.Status == TorrentStatus.Paused;
+        }
+
+        private void StartSelectedTorrent()
+        {
+            throw new System.NotImplementedException();
         }
 
         private void OnAddTorrents(IDialog dialog)
@@ -86,6 +97,7 @@ namespace Cassiopeia.ViewModels
         public InputGestureCommand AddTorrentsDialogCommand { get; }
         public RelayCommand<IDialog> AddTorrentsCommand { get; }
         public InputGestureCommand OpenFileCommand { get; }
+        public InputGestureCommand StartSelectedTorrentCommand { get; }
 
         public Torrent SelectedTorrent
         {
