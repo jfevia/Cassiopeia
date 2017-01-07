@@ -49,6 +49,14 @@ namespace Cassiopeia.ViewModels
                         new Torrent {Name = "Torrent 1"}
                     }),
                     new SessionCategory("Error", new List<Torrent>())
+                }),
+                new Session("Categories", new List<SessionCategory>
+                {
+                    new SessionCategory("Ubuntu", new List<Torrent>
+                    {
+                        new Torrent {Name = "Torrent 1"}
+                    }),
+                    new SessionCategory("Unknown", new List<Torrent>())
                 })
             };
             _categories = new ObservableCollection<string>();
