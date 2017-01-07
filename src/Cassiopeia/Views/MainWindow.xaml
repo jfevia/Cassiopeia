@@ -7,8 +7,8 @@
         xmlns:models="clr-namespace:Cassiopeia.Models"
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         Title="MainWindow"
-        Width="525"
-        Height="350"
+        Width="800"
+        Height="600"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         WindowStartupLocation="CenterOwner"
         WindowState="Maximized"
@@ -21,8 +21,13 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="150" MaxWidth="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <MenuItem Header="File">
                 <MenuItem Command="{Binding AddTorrentsDialogCommand}" Header="Add Torrent" InputGestureText="{Binding AddTorrentsDialogCommand.InputGestureText}" />
                 <Separator />
@@ -87,214 +92,242 @@
                 <MenuItem Header="About..." />
             </MenuItem>
         </Menu>
-        <xcad:DockingManager Grid.Row="1"
-                             Grid.Column="0"
-                             AllowMixedOrientation="True"
-                             BorderBrush="Black"
-                             BorderThickness="1">
-            <xcad:DockingManager.DocumentHeaderTemplate>
-                <DataTemplate>
+        <TreeView Grid.Row="1"
+                  Grid.RowSpan="2"
+                  Grid.Column="0"
+                  ItemsSource="{Binding Sessions}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type models:Session}" ItemsSource="{Binding SessionCategories}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Margin="0,0,4,0" Source="{Binding IconSource}" />
-                        <TextBlock Text="{Binding Title}" />
+                        <ContentControl Width="24" Height="24" Margin="0,0,5,0">
+                            <ContentControl.Template>
+                                <ControlTemplate>
+                                    <Viewbox Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Stretch="Uniform">
+                                        <Canvas Width="24" Height="24">
+                                            <Canvas.RenderTransform>
+                                                <TranslateTransform X="0" Y="0" />
+                                            </Canvas.RenderTransform>
+                                            <Canvas.Resources />
+                                            <Path Fill="{DynamicResource SolidColorBrushSushi}">
+                                                <Path.Data>
+                                                    <PathGeometry Figures="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" FillRule="NonZero" />
+                                                </Path.Data>
+                                            </Path>
+                                            <Path>
+                                                <Path.Data>
+                                                    <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero" />
+                                                </Path.Data>
+                                            </Path>
+                                        </Canvas>
+                                    </Viewbox>
+                                </ControlTemplate>
+                            </ContentControl.Template>
+                        </ContentControl>
+                        <TextBlock Text="{Binding Name}" />
                     </StackPanel>
-                </DataTemplate>
-            </xcad:DockingManager.DocumentHeaderTemplate>
-            <xcad:LayoutRoot>
-                <xcad:LayoutPanel Orientation="Horizontal">
-                    <xcad:LayoutPanel DockMinWidth="200">
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Session Explorer">
-                                <TreeView>
-                                    <TreeView.Resources>
-                                        <HierarchicalDataTemplate DataType="{x:Type models:Sessions}" ItemsSource="{Binding Sessions}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Margin="0,0,5,0" Source="/Images/group.png" />
-                                                <TextBlock Text="{Binding Name}" />
-                                                <TextBlock Text=" (" />
-                                                <TextBlock Foreground="Blue" Text="{Binding SessionCategories.Count}" />
-                                                <TextBlock Text=")" />
-                                            </StackPanel>
-                                        </HierarchicalDataTemplate>
-                                        <DataTemplate DataType="{x:Type models:SessionCategory}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Margin="0,0,5,0" Source="/Images/user.png" />
-                                                <TextBlock Text="{Binding Name}" />
-                                                <TextBlock Text=" (" />
-                                                <TextBlock Text="{Binding Torrents.Count}" />
-                                                <TextBlock Text=")" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </TreeView.Resources>
-                                </TreeView>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutPanel>
-                    <xcad:LayoutPanel Orientation="Vertical">
-                        <xcad:LayoutDocumentPaneGroup>
-                            <xcad:LayoutDocumentPane>
-                                <xcad:LayoutDocument Title="Session" CanClose="False">
-                                    <DataGrid x:Name="DataGridTorrents"
-                                              AutoGenerateColumns="False"
-                                              CanUserAddRows="False"
-                                              CanUserDeleteRows="False"
-                                              ItemsSource="{Binding Torrents}"
-                                              SelectedItem="{Binding SelectedTorrent}">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Header="#" IsReadOnly="True">
-                                                <DataGridTextColumn.Binding>
-                                                    <MultiBinding Converter="{StaticResource ItemToRowNumberConverter}">
-                                                        <Binding />
-                                                        <Binding ElementName="DataGridTorrents" Path="Items" />
-                                                    </MultiBinding>
-                                                </DataGridTextColumn.Binding>
-                                            </DataGridTextColumn>
-                                            <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Size}" Header="Size" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Progress}" Header="Progress" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding DownloadSpeed}" Header="Down Speed" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding UploadSpeed}" Header="Up Speed" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Eta}" Header="ETA" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding SeedCount}" Header="Seeds" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding PeerCount}" Header="Peers" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding FileCount}" Header="Files" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Uploaded}" Header="Uploaded" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding Ratio}" Header="Ratio" IsReadOnly="True" />
-                                            <DataGridTextColumn Binding="{Binding AddedDate}" Header="Added Date" IsReadOnly="True" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </xcad:LayoutDocument>
-                            </xcad:LayoutDocumentPane>
-                        </xcad:LayoutDocumentPaneGroup>
-                        <xcad:LayoutAnchorablePane DockMinHeight="200">
-                            <xcad:LayoutAnchorable Title="Status">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <ProgressBar Grid.Row="0"
-                                                 Grid.Column="0"
-                                                 Grid.ColumnSpan="8"
-                                                 Height="30"
-                                                 Maximum="100"
-                                                 Minimum="0"
-                                                 Value="23" />
-                                    <Label Grid.Row="1" Grid.Column="0" Content="Downloaded" />
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="3.12 GiB (900.28 MiB)" />
-                                    <Label Grid.Row="1" Grid.Column="2" Content="Uploaded" />
-                                    <TextBlock Grid.Row="1" Grid.Column="3" Text="823 MiB (62.53 MiB)" />
-                                    <Label Grid.Row="1" Grid.Column="4" Content="Seeders" />
-                                    <TextBlock Grid.Row="1" Grid.Column="5" Text="123 (468)" />
-                                    <Label Grid.Row="1" Grid.Column="6" Content="Peers" />
-                                    <TextBlock Grid.Row="1" Grid.Column="7" Text="7 (47)" />
-                                    <Label Grid.Row="2" Grid.Column="0" Content="Down Speed" />
-                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="829.28 KiB" />
-                                    <Label Grid.Row="2" Grid.Column="2" Content="Up Speed" />
-                                    <TextBlock Grid.Row="2" Grid.Column="3" Text="2.21 KiB" />
-                                    <Label Grid.Row="2" Grid.Column="4" Content="Active Time" />
-                                    <TextBlock Grid.Row="2" Grid.Column="5" Text="1h 38m" />
-                                    <Label Grid.Row="2" Grid.Column="6" Content="ETA" />
-                                    <TextBlock Grid.Row="2" Grid.Column="7" Text="52m 13s" />
-                                    <Label Grid.Row="3" Grid.Column="0" Content="Share Ratio" />
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="0.239" />
-                                    <Label Grid.Row="3" Grid.Column="2" Content="Pieces" />
-                                    <TextBlock Grid.Row="3" Grid.Column="3" Text="976 (2.0 MiB)" />
-                                    <Label Grid.Row="3" Grid.Column="4" Content="Status" />
-                                    <TextBlock Grid.Row="3" Grid.Column="5" Text="Paused" />
-                                    <Label Grid.Row="3" Grid.Column="6" Content="Date Added" />
-                                    <TextBlock Grid.Row="3" Grid.Column="7" Text="28 Dec 2016" />
-                                </Grid>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Details">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Row="0" Grid.Column="0" Content="Name" />
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Ubuntu.iso" />
-                                    <Label Grid.Row="0" Grid.Column="2" Content="Hash" />
-                                    <TextBlock Grid.Row="0" Grid.Column="3" Text="37aa865097a7b436771084d84f0b85d002825d21" />
-                                    <Label Grid.Row="0" Grid.Column="4" Content="Path" />
-                                    <TextBlock Grid.Row="0" Grid.Column="5" Text="C:\Users\Cassiopeia\Downloads" />
-                                    <Label Grid.Row="1" Grid.Column="0" Content="Total Size" />
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="1.87 GiB" />
-                                    <Label Grid.Row="1" Grid.Column="2" Content="No. of files" />
-                                    <TextBlock Grid.Row="1" Grid.Column="3" Text="8" />
-                                </Grid>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Trackers">
-                                <DataGrid AutoGenerateColumns="False"
-                                          CanUserAddRows="False"
-                                          CanUserDeleteRows="False"
-                                          ItemsSource="{Binding SelectedTorrent.Trackers}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Status}" Header="Status" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Seeders}" Header="Seeders" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Peers}" Header="Peers" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Files">
-                                <DataGrid AutoGenerateColumns="False"
-                                          CanUserAddRows="False"
-                                          CanUserDeleteRows="False"
-                                          ItemsSource="{Binding SelectedTorrent.Files}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Size}" Header="Size" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Progress}" Header="Progress" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding DownloadPriority}" Header="Priority" IsReadOnly="True" />
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Peers">
-                                <DataGrid AutoGenerateColumns="False"
-                                          CanUserAddRows="False"
-                                          CanUserDeleteRows="False"
-                                          ItemsSource="{Binding SelectedTorrent.Peers}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Binding="{Binding Country}" Header="Country" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Address}" Header="Address" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Client}" Header="Client" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Progress}" Header="Progress" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding Uploaded}" Header="Uploaded" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding DownloadSpeed}" Header="Down Speed" IsReadOnly="True" />
-                                        <DataGridTextColumn Binding="{Binding UploadSpeed}" Header="Up Speed" IsReadOnly="True" />
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutPanel>
-                </xcad:LayoutPanel>
-            </xcad:LayoutRoot>
-        </xcad:DockingManager>
-        <StatusBar Grid.Row="2">
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:SessionCategory}">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentControl Width="24" Height="24" Margin="0,0,5,0">
+                            <ContentControl.Template>
+                                <ControlTemplate>
+                                    <Viewbox Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Stretch="Uniform">
+                                        <Canvas Width="1000" Height="1000">
+                                            <Canvas.RenderTransform>
+                                                <TranslateTransform X="0" Y="0" />
+                                            </Canvas.RenderTransform>
+                                            <Canvas.Resources />
+                                            <Canvas>
+                                                <Path Fill="{DynamicResource SolidColorBrushDodgerBlue}">
+                                                    <Path.Data>
+                                                        <PathGeometry Figures="M624.6 118.3H375.4c-8.8 0-15.9 7.1-15.9 15.9v731.6c0 8.8 7.1 15.9 15.9 15.9h249.2c8.8 0 15.9-7.1 15.9-15.9V134.2C640.4 125.4 633.3 118.3 624.6 118.3z M500 742.2c-30.6 0-55.4-24.8-55.4-55.4c0-30.6 24.8-55.4 55.4-55.4c30.6 0 55.4 24.8 55.4 55.4C555.4 717.4 530.6 742.2 500 742.2z M602 459.2c0 8.8-7.1 15.9-15.9 15.9H413.9c-8.8 0-15.9-7.1-15.9-15.9v-15.9c0-8.8 7.1-15.9 15.9-15.9h172.2c8.8 0 15.9 7.1 15.9 15.9V459.2z M602 379.9c0 8.8-7.1 15.9-15.9 15.9H413.9c-8.8 0-15.9-7.1-15.9-15.9V364c0-8.8 7.1-15.9 15.9-15.9h172.2c8.8 0 15.9 7.1 15.9 15.9V379.9z M602 300.6c0 8.8-7.1 15.9-15.9 15.9H413.9c-8.8 0-15.9-7.1-15.9-15.9v-15.9c0-8.8 7.1-15.9 15.9-15.9h172.2c8.8 0 15.9 7.1 15.9 15.9V300.6z M602 221.2c0 8.8-7.1 15.9-15.9 15.9H413.9c-8.8 0-15.9-7.1-15.9-15.9v-15.9c0-8.8 7.1-15.9 15.9-15.9h172.2c8.8 0 15.9 7.1 15.9 15.9V221.2L602 221.2z" FillRule="NonZero" />
+                                                    </Path.Data>
+                                                </Path>
+                                                <Path Fill="{DynamicResource SolidColorBrushSushi}">
+                                                    <Path.Data>
+                                                        <PathGeometry Figures="M990 202.8c0-7.5-6.3-14.1-14.1-14.8c-73.9-6.7-147.8-13.4-221.6-20.1c-0.8-0.1-3.1 0-5.6 0.7l-86.4 21.8v678.6l89.4 12.6c1.1 0.2 2.5 0 2.6 0c73.9-6.7 147.8-14.2 221.6-20.9c7.8-0.7 14.1-7.3 14.1-14.9C990 673.3 990 375.4 990 202.8L990 202.8z M774.3 249.3c0-8 6.3-14.1 14.1-13.5c51.1 3.6 102.1 7.2 153.2 10.8c7.8 0.6 14.1 7.1 14.1 14.7V275c0 7.6-6.3 13.4-14.1 12.9c-51-2.9-102.1-5.8-153.2-8.7c-7.8-0.5-14.1-7.3-14.1-15.3V249.3L774.3 249.3z M955.7 480.6c0 7.6-6.3 13.8-14.1 13.8c-51 0.6-102.1 1.1-153.2 1.7c-7.8 0.1-14.1-6.3-14.1-14.4v-14.5c0-8 6.3-14.5 14.1-14.5c51.1 0.2 102.1 0.3 153.2 0.4c7.8 0 14.1 6.2 14.1 13.8V480.6z M941.6 425.6c-51-0.6-102.1-1.2-153.2-1.8c-7.8-0.1-14.1-6.7-14.1-14.7v-14.5c0-8 6.3-14.4 14.1-14.2c51.1 1.3 102.1 2.6 153.2 3.9c7.8 0.2 14.1 6.5 14.1 14.1c0 5.5 0 8.2 0 13.7C955.7 419.6 949.4 425.7 941.6 425.6z M955.7 343.5c0 7.6-6.3 13.5-14.1 13.2c-51-1.7-102.1-3.5-153.2-5.3c-7.8-0.3-14.1-7-14.1-15V322c0-8 6.3-14.2 14.1-13.8c51.1 2.4 102.1 4.9 153.2 7.4c7.8 0.4 14.1 6.8 14.1 14.4V343.5L955.7 343.5z" FillRule="NonZero" />
+                                                    </Path.Data>
+                                                </Path>
+                                                <Path Fill="{DynamicResource SolidColorBrushSushi}">
+                                                    <Path.Data>
+                                                        <PathGeometry Figures="M245.7 167.8c-73.9 6.7-147.8 13.4-221.6 20.1c-7.8 0.7-14.1 7.3-14.1 14.8c0 172.6 0 470.4 0 643c0 7.5 6.3 14.1 14.1 14.9c73.9 6.7 147.8 14.2 221.6 20.9c0.1 0 1.5 0.2 2.6 0l89.4-12.6V190.3l-86.4-21.8C248.9 167.8 246.6 167.7 245.7 167.8L245.7 167.8z M225.6 481.7c0 8-6.3 14.5-14.1 14.4c-51.1-0.6-102.1-1.1-153.2-1.7c-7.8-0.1-14.1-6.3-14.1-13.8v-13.7c0-7.6 6.3-13.7 14.1-13.8c51.1-0.1 102.1-0.3 153.2-0.4c7.8 0 14.1 6.5 14.1 14.5V481.7z M225.6 409.1c0 8-6.3 14.6-14.1 14.7c-51.1 0.6-102.1 1.2-153.2 1.8c-7.8 0.1-14.1-6-14.1-13.5c0-5.5 0-8.2 0-13.7c0-7.6 6.3-13.9 14.1-14.1c51.1-1.3 102.1-2.6 153.2-3.9c7.8-0.2 14.1 6.1 14.1 14.2V409.1z M225.6 336.4c0 8-6.3 14.8-14.1 15c-51.1 1.7-102.1 3.5-153.2 5.3c-7.8 0.2-14.1-5.7-14.1-13.2v-13.7c0-7.6 6.3-14 14.1-14.4c51.1-2.4 102.1-4.9 153.2-7.4c7.8-0.4 14.1 5.8 14.1 13.8V336.4L225.6 336.4z M225.6 263.8c0 8-6.3 14.9-14.1 15.3c-51.1 2.9-102.1 5.8-153.2 8.7c-7.8 0.4-14.1-5.4-14.1-12.9v-13.7c0-7.6 6.3-14.1 14.1-14.7c51.1-3.6 102.1-7.2 153.2-10.8c7.8-0.6 14.1 5.5 14.1 13.5V263.8L225.6 263.8z" FillRule="NonZero" />
+                                                    </Path.Data>
+                                                </Path>
+                                            </Canvas>
+                                        </Canvas>
+                                    </Viewbox>
+                                </ControlTemplate>
+                            </ContentControl.Template>
+                        </ContentControl>
+                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Text=" (" />
+                        <TextBlock Text="{Binding Torrents.Count}" />
+                        <TextBlock Text=")" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+        <DataGrid x:Name="DataGridTorrents"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ItemsSource="{Binding Torrents}"
+                  SelectedItem="{Binding SelectedTorrent}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#" IsReadOnly="True">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding Converter="{StaticResource ItemToRowNumberConverter}">
+                            <Binding />
+                            <Binding ElementName="DataGridTorrents" Path="Items" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Size}" Header="Size" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Progress}" Header="Progress" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding DownloadSpeed}" Header="Down Speed" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding UploadSpeed}" Header="Up Speed" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Eta}" Header="ETA" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding SeedCount}" Header="Seeds" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding PeerCount}" Header="Peers" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding FileCount}" Header="Files" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Uploaded}" Header="Uploaded" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Ratio}" Header="Ratio" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding AddedDate}" Header="Added Date" IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <TabControl Grid.Row="2" Grid.Column="1" Height="160">
+            <TabItem Header="Status">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar Grid.Row="0"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="8"
+                                 Height="30"
+                                 Maximum="100"
+                                 Minimum="0"
+                                 Value="23" />
+                    <Label Grid.Row="1" Grid.Column="0" Content="Downloaded" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="3.12 GiB (900.28 MiB)" />
+                    <Label Grid.Row="1" Grid.Column="2" Content="Uploaded" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="823 MiB (62.53 MiB)" />
+                    <Label Grid.Row="1" Grid.Column="4" Content="Seeders" />
+                    <TextBlock Grid.Row="1" Grid.Column="5" Text="123 (468)" />
+                    <Label Grid.Row="1" Grid.Column="6" Content="Peers" />
+                    <TextBlock Grid.Row="1" Grid.Column="7" Text="7 (47)" />
+                    <Label Grid.Row="2" Grid.Column="0" Content="Down Speed" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="829.28 KiB" />
+                    <Label Grid.Row="2" Grid.Column="2" Content="Up Speed" />
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="2.21 KiB" />
+                    <Label Grid.Row="2" Grid.Column="4" Content="Active Time" />
+                    <TextBlock Grid.Row="2" Grid.Column="5" Text="1h 38m" />
+                    <Label Grid.Row="2" Grid.Column="6" Content="ETA" />
+                    <TextBlock Grid.Row="2" Grid.Column="7" Text="52m 13s" />
+                    <Label Grid.Row="3" Grid.Column="0" Content="Share Ratio" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="0.239" />
+                    <Label Grid.Row="3" Grid.Column="2" Content="Pieces" />
+                    <TextBlock Grid.Row="3" Grid.Column="3" Text="976 (2.0 MiB)" />
+                    <Label Grid.Row="3" Grid.Column="4" Content="Status" />
+                    <TextBlock Grid.Row="3" Grid.Column="5" Text="Paused" />
+                    <Label Grid.Row="3" Grid.Column="6" Content="Date Added" />
+                    <TextBlock Grid.Row="3" Grid.Column="7" Text="28 Dec 2016" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Details">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Name" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Ubuntu.iso" />
+                    <Label Grid.Row="0" Grid.Column="2" Content="Hash" />
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="37aa865097a7b436771084d84f0b85d002825d21" />
+                    <Label Grid.Row="0" Grid.Column="4" Content="Path" />
+                    <TextBlock Grid.Row="0" Grid.Column="5" Text="C:\Users\Cassiopeia\Downloads" />
+                    <Label Grid.Row="1" Grid.Column="0" Content="Total Size" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="1.87 GiB" />
+                    <Label Grid.Row="1" Grid.Column="2" Content="No. of files" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="8" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Trackers">
+                <DataGrid AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          ItemsSource="{Binding SelectedTorrent.Trackers}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Status}" Header="Status" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Seeders}" Header="Seeders" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Peers}" Header="Peers" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Files">
+                <DataGrid AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          ItemsSource="{Binding SelectedTorrent.Files}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Size}" Header="Size" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Progress}" Header="Progress" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding DownloadPriority}" Header="Priority" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Peers">
+                <DataGrid AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          ItemsSource="{Binding SelectedTorrent.Peers}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Country}" Header="Country" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Address}" Header="Address" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Client}" Header="Client" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Progress}" Header="Progress" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Downloaded}" Header="Downloaded" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Uploaded}" Header="Uploaded" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding DownloadSpeed}" Header="Down Speed" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding UploadSpeed}" Header="Up Speed" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+        <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
             <StatusBarItem Content="Connections: 199 (200)" />
             <StatusBarItem Content="Download Speed: 300.02 KiB/s (300.0 KiB/s)" />
             <StatusBarItem Content="Upload Speed: 10 KiB/s (Unlimited)" />
