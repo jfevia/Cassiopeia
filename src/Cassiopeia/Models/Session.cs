@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 
 namespace Cassiopeia.Models
 {
-    internal class Sessions
+    internal class Session
     {
-        public Sessions(string name, IEnumerable<SessionCategory> sessionCategories)
+        public Session(string name, IEnumerable<SessionCategory> sessionCategories)
         {
             Name = name;
             SessionCategories = new ObservableCollection<SessionCategory>(sessionCategories);

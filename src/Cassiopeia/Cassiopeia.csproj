@@ -114,7 +114,7 @@
     <Compile Include="Models\Priority.cs" />
     <Compile Include="Models\Seed.cs" />
     <Compile Include="Models\SessionCategory.cs" />
-    <Compile Include="Models\Sessions.cs" />
+    <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Torrent.cs" />
     <Compile Include="Converters\TorrentConverter.cs" />
     <Compile Include="Models\Tracker.cs" />
@@ -172,6 +172,10 @@
     <ProjectReference Include="..\Cassiopeia.Windows.Controls\Cassiopeia.Windows.Controls.csproj">
       <Project>{ca26c4e9-e353-4ef1-831d-b907b176e278}</Project>
       <Name>Cassiopeia.Windows.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cassiopeia.Windows.Themes\Cassiopeia.Windows.Themes.csproj">
+      <Project>{a3f6941c-86bf-45fc-95ad-c52eec7e40f8}</Project>
+      <Name>Cassiopeia.Windows.Themes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

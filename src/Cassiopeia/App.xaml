@@ -3,12 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ignore="http://www.galasoft.ch/ignore"
-             mc:Ignorable="d ignore"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Cassiopeia.ViewModels"
-             StartupUri="Views/MainWindow.xaml">
+             StartupUri="Views/MainWindow.xaml"
+             mc:Ignorable="d ignore">
     <Application.Resources>
-        <viewModels:ViewModelLocator x:Key="Locator"
-                                 d:IsDataSource="True" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Cassiopeia.Windows.Themes;component/Cassiopeia.Windows.Colors.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <viewModels:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
