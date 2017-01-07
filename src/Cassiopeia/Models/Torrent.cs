@@ -42,6 +42,7 @@ namespace Cassiopeia.Models
         private long _size;
         private bool _skipHashCheck;
         private bool _startTorrent;
+        private TorrentStatus _status;
         private long _uploaded;
         private double _uploadSpeed;
         private bool _useAdditionalSlotsOnLowUploadSpeed;
@@ -56,6 +57,7 @@ namespace Cassiopeia.Models
             _enabledDht = true;
             _peerExchange = true;
             _localPeerDiscovery = true;
+            _status = TorrentStatus.Paused;
             _addedDate = DateTime.Now;
         }
 
@@ -69,6 +71,12 @@ namespace Cassiopeia.Models
         {
             get { return _eta; }
             set { Set(nameof(Eta), ref _eta, value); }
+        }
+
+        public TorrentStatus Status
+        {
+            get { return _status; }
+            set { Set(nameof(Status), ref _status, value); }
         }
 
         public DateTime AddedDate

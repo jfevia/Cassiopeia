@@ -117,6 +117,7 @@
     <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Torrent.cs" />
     <Compile Include="Converters\TorrentConverter.cs" />
+    <Compile Include="Models\TorrentStatus.cs" />
     <Compile Include="Models\Tracker.cs" />
     <Compile Include="Models\TrackerStatus.cs" />
     <Compile Include="Services\WindowService.cs" />
