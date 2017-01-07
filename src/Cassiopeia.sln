@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26014.0
+VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassiopeia", "Cassiopeia\Cassiopeia.csproj", "{1A0DCD3A-C528-4381-A5B7-D127CB1F30AC}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassiopeia.Collections", "Cassiopeia.Collections\Cassiopeia.Collections.csproj", "{315EE063-EC9A-4819-A7DE-226E2C6D28AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassiopeia.Windows.Controls", "Cassiopeia.Windows.Controls\Cassiopeia.Windows.Controls.csproj", "{CA26C4E9-E353-4EF1-831D-B907B176E278}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassiopeia.Windows.Themes", "Cassiopeia.Windows.Themes\Cassiopeia.Windows.Themes.csproj", "{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +60,12 @@ Global
 		{CA26C4E9-E353-4EF1-831D-B907B176E278}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA26C4E9-E353-4EF1-831D-B907B176E278}.Stats|Any CPU.ActiveCfg = Release|Any CPU
 		{CA26C4E9-E353-4EF1-831D-B907B176E278}.Stats|Any CPU.Build.0 = Release|Any CPU
+		{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}.Stats|Any CPU.ActiveCfg = Release|Any CPU
+		{A3F6941C-86BF-45FC-95AD-C52EEC7E40F8}.Stats|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
