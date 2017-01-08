@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Cassiopeia.BitTorrent;
 using Cassiopeia.Collections.ObjectModel;
@@ -14,14 +15,16 @@ namespace Cassiopeia.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private ObservableCollection<Torrent> _newTorrents;
-        private Torrent _selectedNewTorrent;
-        private ObservableCollection<Torrent> _torrents;
-        private Torrent _selectedTorrent;
-        private ObservableCollection<string> _cachedDownloadFolders;
         private ObservableCollection<string> _cachedCompletedDownloadFolders;
-        private ObservableCollection<Session> _sessions;
+        private ObservableCollection<string> _cachedDownloadFolders;
         private ObservableCollection<string> _categories;
+        private ObservableCollection<Torrent> _newTorrents;
+        private ObservableCollection<Option> _options;
+        private Torrent _selectedNewTorrent;
+        private Torrent _selectedTorrent;
+        private ObservableCollection<Session> _sessions;
+        private ObservableCollection<Torrent> _torrents;
+        private string _searchOptionCriteria;
 
         public MainViewModel()
         {
@@ -40,7 +43,7 @@ namespace Cassiopeia.ViewModels
                     new SessionCategory("Paused", new List<Torrent>()),
                     new SessionCategory("Queued", new List<Torrent>()),
                     new SessionCategory("Error", new List<Torrent>()),
-                    new SessionCategory("Checking", new List<Torrent>()),
+                    new SessionCategory("Checking", new List<Torrent>())
                 }),
                 new Session("Trackers", new List<SessionCategory>
                 {
@@ -59,29 +62,66 @@ namespace Cassiopeia.ViewModels
                     new SessionCategory("Unknown", new List<Torrent>())
                 })
             };
+            _options = new ObservableCollection<Option>
+            {
+                new Option("Environment", OptionType.General, new[]
+                {
+                    new Option("General"),
+                    new Option("Keyboard & Shortcuts")
+                }),
+                new Option("Directories", OptionType.Directories, new[]
+                {
+                    new Option("Downloaded Files"),
+                    new Option("Torrent Files")
+                }),
+                new Option("Connections", OptionType.Connections, new[]
+                {
+                    new Option("Listening Ports"),
+                    new Option("Proxy Settings")
+                }),
+                new Option("Bandwidth", OptionType.Bandwidth, new[]
+                {
+                    new Option("Global Rate Limits"),
+                    new Option("Download Rate Limits"),
+                    new Option("Seeding Rate Limits")
+                }),
+                new Option("BitTorrent", OptionType.BitTorrent, new[]
+                {
+                    new Option("Initial Seeding"),
+                    new Option("DHT"),
+                    new Option("μTP")
+                }),
+                new Option("Advanced", OptionType.Advanced, new[]
+                {
+                    new Option("Disk I/O"),
+                    new Option("Network"),
+                    new Option("Peer Settings"),
+                    new Option("Queue Settings"),
+                    new Option("RSS")
+                })
+            };
             _categories = new ObservableCollection<string>();
             _cachedDownloadFolders = new ObservableCollection<string>();
             _cachedCompletedDownloadFolders = new ObservableCollection<string>();
-            AddTorrentsDialogCommand = new InputGestureCommand(ShowAddTorrentWindow, "Ctrl+N");
+            AddTorrentsDialogCommand = new InputGestureCommand(ShowAddTorrentDialog, "Ctrl+N");
+            OptionsDialogCommand = new InputGestureCommand(ShowOptionsDialog, "Ctrl+P");
             OpenFileCommand = new InputGestureCommand(ShowOpenFileDialog, "Ctrl+O");
             AddTorrentsCommand = new RelayCommand<IDialog>(OnAddTorrents);
-            StartSelectedTorrentCommand = new InputGestureCommand(StartSelectedTorrent, CanExecuteStartSelectedTorrent, "Ctrl+S");
+            SaveOptionsCommand = new RelayCommand(OnSaveOptions);
+            SearchOptionCriteriaChangedCommand = new RelayCommand(OnSearchOptionCriteriaChanged);
+            StartSelectedTorrentCommand = new InputGestureCommand(StartSelectedTorrent, CanExecuteStartSelectedTorrent,
+                "Ctrl+S");
         }
 
-        private bool CanExecuteStartSelectedTorrent()
+        private void OnSearchOptionCriteriaChanged()
         {
-            return SelectedTorrent != null && SelectedTorrent.Status == TorrentStatus.Paused;
+            ApplyOptionsFilters();
         }
 
-        private void StartSelectedTorrent()
+        private void ApplyOptionsFilters()
         {
-            throw new System.NotImplementedException();
-        }
-
-        private void OnAddTorrents(IDialog dialog)
-        {
-            Torrents.AddRange(NewTorrents);
-            dialog.CloseDialog();
+            foreach (var option in _options)
+                option.ApplyCriteria(SearchOptionCriteria, new Stack<Option>());
         }
 
         public ObservableCollection<string> CachedCompletedDownloadFolders
@@ -96,6 +136,12 @@ namespace Cassiopeia.ViewModels
             set { Set(nameof(Sessions), ref _sessions, value); }
         }
 
+        public ObservableCollection<Option> Options
+        {
+            get { return _options; }
+            set { Set(nameof(Options), ref _options, value); }
+        }
+
         public ObservableCollection<string> CachedDownloadFolders
         {
             get { return _cachedDownloadFolders; }
@@ -103,7 +149,10 @@ namespace Cassiopeia.ViewModels
         }
 
         public InputGestureCommand AddTorrentsDialogCommand { get; }
+        public InputGestureCommand OptionsDialogCommand { get; }
         public RelayCommand<IDialog> AddTorrentsCommand { get; }
+        public RelayCommand SaveOptionsCommand { get; }
+        public RelayCommand SearchOptionCriteriaChangedCommand { get; }
         public InputGestureCommand OpenFileCommand { get; }
         public InputGestureCommand StartSelectedTorrentCommand { get; }
 
@@ -111,6 +160,12 @@ namespace Cassiopeia.ViewModels
         {
             get { return _selectedTorrent; }
             set { Set(nameof(SelectedTorrent), ref _selectedTorrent, value); }
+        }
+
+        public string SearchOptionCriteria
+        {
+            get { return _searchOptionCriteria; }
+            set { Set(nameof(SearchOptionCriteria), ref _searchOptionCriteria, value); }
         }
 
         public ObservableCollection<string> Categories
@@ -137,6 +192,32 @@ namespace Cassiopeia.ViewModels
             set { Set(nameof(Torrents), ref _torrents, value); }
         }
 
+        private void ShowOptionsDialog()
+        {
+            WindowService.ShowWindow<OptionsWindow>();
+        }
+
+        private void OnSaveOptions()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanExecuteStartSelectedTorrent()
+        {
+            return SelectedTorrent != null && SelectedTorrent.Status == TorrentStatus.Paused;
+        }
+
+        private void StartSelectedTorrent()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnAddTorrents(IDialog dialog)
+        {
+            Torrents.AddRange(NewTorrents);
+            dialog.CloseDialog();
+        }
+
         public void ShowOpenFileDialog()
         {
             var openFileDialog = new OpenFileDialog();
@@ -154,7 +235,7 @@ namespace Cassiopeia.ViewModels
             }
         }
 
-        private void ShowAddTorrentWindow()
+        private void ShowAddTorrentDialog()
         {
             WindowService.ShowWindow<AddTorrentsWindow>();
         }

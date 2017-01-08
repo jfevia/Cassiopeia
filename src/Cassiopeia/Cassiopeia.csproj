@@ -91,6 +91,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Option.cs" />
+    <Compile Include="Models\OptionType.cs" />
+    <Compile Include="Views\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\AddTorrentsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,7 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\FileTypeImageConverter.cs" />
+    <Compile Include="Converters\FileTypeToImageConverter.cs" />
     <Compile Include="Converters\ItemToRowNumberConverter.cs" />
     <Compile Include="Models\FileItem.cs" />
     <Compile Include="Models\FileType.cs" />
@@ -130,6 +135,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\OptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -169,6 +178,10 @@
     <ProjectReference Include="..\Cassiopeia.Collections\Cassiopeia.Collections.csproj">
       <Project>{315ee063-ec9a-4819-a7de-226e2c6d28ae}</Project>
       <Name>Cassiopeia.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cassiopeia.Common\Cassiopeia.Common.csproj">
+      <Project>{A5490677-5BED-4A22-B425-B583222BDCF7}</Project>
+      <Name>Cassiopeia.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cassiopeia.Windows.Controls\Cassiopeia.Windows.Controls.csproj">
       <Project>{ca26c4e9-e353-4ef1-831d-b907b176e278}</Project>

@@ -5,7 +5,7 @@ using Cassiopeia.Models;
 
 namespace Cassiopeia.Converters
 {
-    internal class FileTypeImageConverter : IValueConverter
+    internal class FileTypeToImageConverter : IValueConverter
     {
         public object Convert(object obj, Type type, object parameter, CultureInfo culture)
         {

@@ -72,7 +72,7 @@
             <MenuItem Header="Tools">
                 <MenuItem Header="Torrent Creator" />
                 <Separator />
-                <MenuItem Header="Options" />
+                <MenuItem Command="{Binding OptionsDialogCommand}" Header="Options" InputGestureText="{Binding OptionsDialogCommand.InputGestureText}" />
             </MenuItem>
             <MenuItem Header="View">
                 <MenuItem Header="Session Explorer" IsCheckable="True" />

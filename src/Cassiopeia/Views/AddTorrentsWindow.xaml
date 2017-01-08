@@ -20,7 +20,7 @@
         WindowStartupLocation="CenterOwner"
         mc:Ignorable="d">
     <Window.Resources>
-        <converters:FileTypeImageConverter x:Key="FileTypeImageConverter" />
+        <converters:FileTypeToImageConverter x:Key="FileTypeToImageConverter" />
         <converters:ItemToRowNumberConverter x:Key="ItemToRowNumberConverter" />
         <ObjectDataProvider x:Key="InitialQueuePositions" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -311,7 +311,7 @@
                                         <DataTemplate DataType="models:FileItem">
                                             <StackPanel Orientation="Horizontal">
                                                 <cassiopeia:RowExpander />
-                                                <Image Margin="0,0,5,0" Source="{Binding Converter={StaticResource FileTypeImageConverter}}" />
+                                                <Image Margin="0,0,5,0" Source="{Binding Converter={StaticResource FileTypeToImageConverter}}" />
                                                 <TextBlock Text="{Binding Name}" />
                                             </StackPanel>
                                         </DataTemplate>
