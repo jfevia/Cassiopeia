@@ -14,9 +14,10 @@
         Width="700"
         Height="500"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
         mc:Ignorable="d">
     <Window.Resources>
-        <converters:OptionTypeToImageConverter x:Key="OptionTypeToImageConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Grid Margin="0,0,0,10">
