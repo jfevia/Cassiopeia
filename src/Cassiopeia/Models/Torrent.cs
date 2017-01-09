@@ -7,6 +7,8 @@ namespace Cassiopeia.Models
     internal class Torrent : ObservableObject
     {
         private readonly ObservableCollection<FileItem> _files;
+        private readonly ObservableCollection<HttpSeed> _httpSeeds;
+        private readonly ObservableCollection<Node> _nodes;
         private readonly ObservableCollection<Peer> _peers;
         private readonly ObservableCollection<Seed> _seeds;
         private readonly ObservableCollection<Tracker> _trackers;
@@ -14,6 +16,7 @@ namespace Cassiopeia.Models
         private int _additionalSlotsLowUploadSpeedPercent;
         private string _category;
         private string _comment;
+        private string _commentUtf8;
         private string _completedDownloadFolder;
         private string _createdBy;
         private long _creationDate;
@@ -38,6 +41,8 @@ namespace Cassiopeia.Models
         private bool _peerExchange;
         private long _pieceSize;
         private double _progress;
+        private string _publisherUrl;
+        private string _publisherUrlUtf8;
         private double _ratio;
         private long _size;
         private bool _skipHashCheck;
@@ -53,6 +58,8 @@ namespace Cassiopeia.Models
             _trackers = new ObservableCollection<Tracker>();
             _peers = new ObservableCollection<Peer>();
             _seeds = new ObservableCollection<Seed>();
+            _httpSeeds = new ObservableCollection<HttpSeed>();
+            _nodes = new ObservableCollection<Node>();
             _startTorrent = true;
             _enabledDht = true;
             _peerExchange = true;
@@ -173,10 +180,38 @@ namespace Cassiopeia.Models
             get { return new ReadOnlyObservableCollection<Tracker>(_trackers); }
         }
 
+        public ReadOnlyObservableCollection<HttpSeed> HttpSeeds
+        {
+            get { return new ReadOnlyObservableCollection<HttpSeed>(_httpSeeds); }
+        }
+
+        public ReadOnlyObservableCollection<Node> Nodes
+        {
+            get { return new ReadOnlyObservableCollection<Node>(_nodes); }
+        }
+
         public string Comment
         {
             get { return _comment; }
             set { Set(nameof(Comment), ref _comment, value); }
+        }
+
+        public string CommentUtf8
+        {
+            get { return _commentUtf8; }
+            set { Set(nameof(CommentUtf8), ref _commentUtf8, value); }
+        }
+
+        public string PublisherUrl
+        {
+            get { return _publisherUrl; }
+            set { Set(nameof(PublisherUrl), ref _publisherUrl, value); }
+        }
+
+        public string PublisherUrlUtf8
+        {
+            get { return _publisherUrlUtf8; }
+            set { Set(nameof(PublisherUrlUtf8), ref _publisherUrlUtf8, value); }
         }
 
         public string CreatedBy
@@ -323,6 +358,22 @@ namespace Cassiopeia.Models
                 _trackers.Add(tracker);
 
             RaisePropertyChanged(() => nameof(Trackers));
+        }
+
+        public void AddNode(Node node)
+        {
+            if (!_nodes.Contains(node))
+                _nodes.Add(node);
+
+            RaisePropertyChanged(() => nameof(Nodes));
+        }
+
+        public void AddHttpSeed(HttpSeed httpSeed)
+        {
+            if (!_httpSeeds.Contains(httpSeed))
+                _httpSeeds.Add(httpSeed);
+
+            RaisePropertyChanged(() => nameof(HttpSeeds));
         }
 
         public void AddFile(FileItem file)

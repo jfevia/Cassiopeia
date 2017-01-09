@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cassiopeia.BitTorrent;
 using Cassiopeia.Models;
 
@@ -8,6 +9,7 @@ namespace Cassiopeia.Converters
     {
         public const string EncodingKey = "encoding";
         public const string CommentKey = "comment";
+        public const string CommentUtf8Key = "comment.utf-8";
         public const string CreatedByKey = "created by";
         public const string CreationDateKey = "creation date";
         public const string AnnounceListKey = "announce-list";
@@ -18,8 +20,14 @@ namespace Cassiopeia.Converters
         public const string PrivateKey = "private";
         public const string FileListKey = "files";
         public const string LengthKey = "length";
-        public const string Md5SumKey = "md5sum";
+        public const string Md5ChecksumKey = "md5sum";
         public const string PathKey = "path";
+        public const string NodesKey = "nodes";
+        public const string HttpSeeds = "httpseeds";
+        public const string UrlListKey = "url-list";
+        public const string PublisherUrlKey = "publisher-url";
+        public const string AzureusPropertiesKey = "azureus_properties";
+        public const string PublisherUrlUtf8Key = "publisher-url.utf-8";
 
         public static Torrent ConvertFromBEncode(BEncodedValue value)
         {
@@ -32,72 +40,130 @@ namespace Cassiopeia.Converters
             var torrent = new Torrent();
             var dictionary = (BEncodedDictionary) value;
 
-            if (dictionary.ContainsKey(EncodingKey))
-                torrent.Encoding = ((BEncodedString) dictionary[EncodingKey]).Text;
-
-            if (dictionary.ContainsKey(CommentKey))
-                torrent.Comment = ((BEncodedString) dictionary[CommentKey]).Text;
-
-            if (dictionary.ContainsKey(CreatedByKey))
-                torrent.CreatedBy = ((BEncodedString) dictionary[CreatedByKey]).Text;
-
-            if (dictionary.ContainsKey(CreationDateKey))
-                torrent.CreationDate = ((BEncodedNumber) dictionary[CreationDateKey]).Number;
-
-            if (dictionary.ContainsKey(AnnounceListKey))
-            {
-                var announceList = (BEncodedList) dictionary[AnnounceListKey];
-                foreach (var announceItem in announceList)
+            foreach (var kvp in dictionary)
+                switch (kvp.Key.Text)
                 {
-                    var announceItemList = (BEncodedList) announceItem;
-
-                    foreach (var announce in announceItemList)
-                        torrent.AddTracker(new Tracker(((BEncodedString) announce).Text));
-                }
-            }
-
-            if (dictionary.ContainsKey(AnnounceKey))
-                torrent.AddTracker(new Tracker(((BEncodedString) dictionary[AnnounceKey]).Text));
-
-            if (dictionary.ContainsKey(InfoDictionaryKey))
-            {
-                var infoDictionary = (BEncodedDictionary) dictionary[InfoDictionaryKey];
-
-                if (infoDictionary.ContainsKey(NameKey))
-                    torrent.Name = ((BEncodedString) infoDictionary[NameKey]).Text;
-
-                if (infoDictionary.ContainsKey(PieceLengthKey))
-                    torrent.PieceSize = ((BEncodedNumber) infoDictionary[PieceLengthKey]).Number;
-
-                if (infoDictionary.ContainsKey(PrivateKey))
-                    torrent.IsPrivate = ((BEncodedNumber) infoDictionary[PrivateKey]).Number != 0;
-
-                if (infoDictionary.ContainsKey(FileListKey))
-                {
-                    var fileList = (BEncodedList) infoDictionary[FileListKey];
-                    foreach (var fileDetails in fileList)
-                    {
-                        var file = new FileItem();
-                        var fileDetailsDictionary = (BEncodedDictionary) fileDetails;
-
-                        if (fileDetailsDictionary.ContainsKey(LengthKey))
-                            file.Size = ((BEncodedNumber) fileDetailsDictionary[LengthKey]).Number;
-
-                        if (fileDetailsDictionary.ContainsKey(Md5SumKey))
-                            file.Md5Sum = ((BEncodedString) fileDetailsDictionary[Md5SumKey]).Text;
-
-                        if (fileDetailsDictionary.ContainsKey(PathKey))
+                    case EncodingKey:
+                        torrent.Encoding = ((BEncodedString) kvp.Value).Text;
+                        break;
+                    case NodesKey:
+                        var nodesList = (BEncodedList) kvp.Value;
+                        foreach (var nodeItem in nodesList)
                         {
-                            var filePaths = (BEncodedList) fileDetailsDictionary[PathKey];
+                            var nodeItemList = (BEncodedList) nodeItem;
 
-                            foreach (var path in filePaths)
-                                file.Path.Add(((BEncodedString) path).Text);
+                            foreach (var node in nodeItemList)
+                                torrent.AddNode(new Node(((BEncodedString) node).Text));
                         }
+                        break;
+                    case UrlListKey:
+                        var encodedString = kvp.Value as BEncodedString;
+                        if (encodedString != null)
+                        {
+                            torrent.AddHttpSeed(new HttpSeed(encodedString.Text));
+                        }
+                        else if (kvp.Value is BEncodedList)
+                        {
+                            var urlList = (BEncodedList) kvp.Value;
+                            foreach (var urlItem in urlList)
+                            {
+                                var urlItemList = (BEncodedList) urlItem;
 
-                        torrent.AddFile(file);
-                    }
+                                foreach (var url in urlItemList)
+                                    torrent.AddHttpSeed(new HttpSeed(((BEncodedString) url).Text));
+                            }
+                        }
+                        break;
+                    case AzureusPropertiesKey:
+                        throw new NotSupportedException("Azureus Properties are not supported in this version.");
+                    case HttpSeeds:
+                        throw new NotSupportedException(
+                            $"The form of web seeding '{HttpSeeds}' is not supported in this version.");
+                    case PublisherUrlKey:
+                        torrent.PublisherUrl = ((BEncodedString) kvp.Value).Text;
+                        break;
+                    case PublisherUrlUtf8Key:
+                        torrent.PublisherUrlUtf8 = ((BEncodedString) kvp.Value).Text;
+                        break;
+                    case CommentUtf8Key:
+                        torrent.CommentUtf8 = ((BEncodedString) kvp.Value).Text;
+                        break;
+                    case CommentKey:
+                        torrent.Comment = ((BEncodedString) kvp.Value).Text;
+                        break;
+                    case CreatedByKey:
+                        torrent.CreatedBy = ((BEncodedString) kvp.Value).Text;
+                        break;
+                    case CreationDateKey:
+                        torrent.CreationDate = ((BEncodedNumber) kvp.Value).Number;
+                        break;
+                    case AnnounceListKey:
+                        var announceList = (BEncodedList) kvp.Value;
+                        foreach (var announceItem in announceList)
+                        {
+                            var announceItemList = (BEncodedList) announceItem;
+
+                            foreach (var announce in announceItemList)
+                                torrent.AddTracker(new Tracker(((BEncodedString) announce).Text));
+                        }
+                        break;
+                    case AnnounceKey:
+                        // BEP 12: if the "announce-list" key is present, the client will ignore the "announce" key
+                        if (dictionary.Keys.Any(s => s.Text == AnnounceListKey))
+                            continue;
+
+                        torrent.AddTracker(new Tracker(((BEncodedString) kvp.Value).Text));
+                        break;
+                    case InfoDictionaryKey:
+                        var infoDictionary = (BEncodedDictionary) kvp.Value;
+                        foreach (var infoKvp in infoDictionary)
+                            switch (infoKvp.Key.Text)
+                            {
+                                case NameKey:
+                                    torrent.Name = ((BEncodedString) infoKvp.Value).Text;
+                                    break;
+                                case PieceLengthKey:
+                                    torrent.PieceSize = ((BEncodedNumber) infoKvp.Value).Number;
+                                    break;
+                                case PrivateKey:
+                                    torrent.IsPrivate = ((BEncodedNumber) infoKvp.Value).Number != 0;
+                                    break;
+                                case FileListKey:
+                                    var fileList = (BEncodedList) infoKvp.Value;
+                                    foreach (var fileDetails in fileList)
+                                    {
+                                        var file = new FileItem();
+                                        var fileDetailsDictionary = (BEncodedDictionary) fileDetails;
+
+                                        foreach (var kvpFileDetails in fileDetailsDictionary)
+                                            switch (kvpFileDetails.Key.Text)
+                                            {
+                                                case LengthKey:
+                                                    file.Size = ((BEncodedNumber) kvpFileDetails.Value).Number;
+                                                    break;
+                                                case Md5ChecksumKey:
+                                                    file.Md5 = ((BEncodedString) kvpFileDetails.Value).Text;
+                                                    break;
+                                                case PathKey:
+                                                    var filePaths = (BEncodedList) kvpFileDetails.Value;
+
+                                                    foreach (var path in filePaths)
+                                                        file.Path.Add(((BEncodedString) path).Text);
+                                                    break;
+                                            }
+
+                                        torrent.AddFile(file);
+                                    }
+                                    break;
+                                default:
+                                    throw new NotSupportedException(
+                                        $"Unknown metadata key '{infoKvp.Key.Text}' found in Info dictionary.");
+                            }
+                        break;
+                    default:
+                        throw new NotSupportedException(
+                            $"Unknown metadata key '{kvp.Key.Text}' found in root dictionary.");
                 }
-            }
 
             return torrent;
         }

@@ -8,7 +8,7 @@ namespace Cassiopeia.Models
     internal class FileItem : ObservableObject
     {
         private long _size;
-        private string _md5Sum;
+        private string _md5;
         private ObservableCollection<string> _path;
         private Priority _downloadPriority;
         private double _progress;
@@ -30,10 +30,10 @@ namespace Cassiopeia.Models
             set { Set(nameof(Path), ref _path, value); }
         }
 
-        public string Md5Sum
+        public string Md5
         {
-            get { return _md5Sum; }
-            set { Set(nameof(Md5Sum), ref _md5Sum, value); }
+            get { return _md5; }
+            set { Set(nameof(Md5), ref _md5, value); }
         }
 
         public double Progress
