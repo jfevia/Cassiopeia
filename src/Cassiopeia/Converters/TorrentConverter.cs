@@ -150,6 +150,9 @@ namespace Cassiopeia.Converters
                                                     foreach (var path in filePaths)
                                                         file.Path.Add(((BEncodedString) path).Text);
                                                     break;
+                                                default:
+                                                    throw new NotSupportedException(
+                                                        $"Unknown metadata key '{kvpFileDetails.Key.Text}' found in Files list.");
                                             }
 
                                         torrent.AddFile(file);
