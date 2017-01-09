@@ -91,6 +91,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\HttpSeed.cs" />
+    <Compile Include="Models\Node.cs" />
     <Compile Include="Models\Option.cs" />
     <Compile Include="Models\OptionType.cs" />
     <Compile Include="Views\OptionsWindow.xaml.cs">
