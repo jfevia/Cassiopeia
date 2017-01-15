@@ -27,7 +27,7 @@ namespace Cassiopeia.BitTorrent
 
         public void Add(KeyValuePair<BEncodedString, BEncodedValue> item)
         {
-            Dictionary.Add(item.Key, item.Value);
+            Add(item.Key, item.Value);
         }
 
         public void Clear()
@@ -154,7 +154,7 @@ namespace Cassiopeia.BitTorrent
 
                 oldkey = key;
                 var value = Decode(Reader);
-                Dictionary.Add(key, value);
+                Add(key, value);
             }
 
             if (Reader.ReadByte() != DictionaryEndDelimiter)
