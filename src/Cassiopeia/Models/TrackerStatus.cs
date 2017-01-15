@@ -6,6 +6,8 @@
         TimeOut,
         HostnameNotFound,
         ConnectionClosedByPeer,
-        NoSuchHostKnown
+        NoSuchHostKnown,
+        Offline,
+        InvalidResponse
     }
 }
