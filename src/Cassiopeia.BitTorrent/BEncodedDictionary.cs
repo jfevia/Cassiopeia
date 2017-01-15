@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Cassiopeia.BitTorrent
@@ -163,48 +160,6 @@ namespace Cassiopeia.BitTorrent
             if (Reader.ReadByte() != DictionaryEndDelimiter)
                 throw new BEncodingException(
                     $"Invalid data. Expected {DictionaryEndDelimiter}, found {Reader.PeekByte()}");
-        }
-
-        public static BEncodedDictionary DecodeTorrent(byte[] bytes)
-        {
-            return DecodeTorrent(new MemoryStream(bytes));
-        }
-
-        public static BEncodedDictionary DecodeTorrent(Stream s)
-        {
-            return DecodeTorrent(new BitTorrentReader(s));
-        }
-
-        public static BEncodedDictionary DecodeTorrent(BitTorrentReader reader)
-        {
-            var torrent = new BEncodedDictionary(reader);
-            if (reader.ReadByte() != DictionaryStartDelimiter)
-                throw new BEncodingException(
-                    $"Invalid data. Expected {DictionaryStartDelimiter}, found {reader.PeekByte()}");
-
-            while (reader.PeekByte() != -1 && reader.PeekByte() != DictionaryEndDelimiter)
-            {
-                var key = (BEncodedString) Decode(reader);
-
-                BEncodedValue value;
-                if (reader.PeekByte() == DictionaryStartDelimiter)
-                {
-                    value = new BEncodedDictionary(reader);
-                    ((BEncodedDictionary) value).Decode();
-                }
-                else
-                {
-                    value = Decode(reader); // Regular BEncoded value
-                }
-
-                torrent.Dictionary.Add(key, value);
-            }
-
-            if (reader.ReadByte() != DictionaryEndDelimiter)
-                throw new BEncodingException(
-                    $"Invalid data. Expected {DictionaryEndDelimiter}, found {reader.PeekByte()}");
-
-            return torrent;
         }
 
         public override bool Equals(object obj)
