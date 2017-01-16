@@ -27,6 +27,7 @@ namespace Cassiopeia.Models
         private bool _enabledDht;
         private string _encoding;
         private TimeSpan _eta;
+        private byte[] _infoHash;
         private InitialQueuePosition _initialPosition;
         private bool _initialSeeding;
         private bool _isPrivate;
@@ -51,6 +52,8 @@ namespace Cassiopeia.Models
         private long _uploaded;
         private double _uploadSpeed;
         private bool _useAdditionalSlotsOnLowUploadSpeed;
+        private byte[] _pieces;
+        private int _pieceCount;
 
         public Torrent()
         {
@@ -66,12 +69,19 @@ namespace Cassiopeia.Models
             _localPeerDiscovery = true;
             _status = TorrentStatus.Paused;
             _addedDate = DateTime.Now;
+            _infoHash = new byte[0];
         }
 
         public long Size
         {
             get { return _size; }
             set { Set(nameof(Size), ref _size, value); }
+        }
+
+        public byte[] InfoHash
+        {
+            get { return _infoHash; }
+            set { Set(nameof(InfoHash), ref _infoHash, value); }
         }
 
         public TimeSpan Eta
@@ -238,6 +248,18 @@ namespace Cassiopeia.Models
             set { Set(nameof(IsPrivate), ref _isPrivate, value); }
         }
 
+        public byte[] Pieces
+        {
+            get { return _pieces; }
+            set { Set(nameof(Pieces), ref _pieces, value); }
+        }
+
+        public int PieceCount
+        {
+            get { return _pieceCount; }
+            set { Set(nameof(PieceCount), ref _pieceCount, value); }
+        }
+
         public long DownloadSize
         {
             get { return _downloadSize; }
@@ -390,6 +412,12 @@ namespace Cassiopeia.Models
                 _peers.Add(peer);
 
             RaisePropertyChanged(() => nameof(Peers));
+        }
+
+        public void Announce(AnnounceParameters announceparameters)
+        {
+            foreach (var tracker in _trackers)
+                tracker.AnnounceAsync(announceparameters);
         }
     }
 }

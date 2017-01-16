@@ -335,7 +335,7 @@
                                 </MultiBinding>
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Uri}" Header="Uri" IsReadOnly="True" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>

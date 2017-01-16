@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using Cassiopeia.BitTorrent;
 using Cassiopeia.Models;
 
@@ -18,6 +19,7 @@ namespace Cassiopeia.Converters
         public const string PieceLengthKey = "piece length";
         public const string InfoDictionaryKey = "info";
         public const string PrivateKey = "private";
+        public const string PiecesKey = "pieces";
         public const string FileListKey = "files";
         public const string LengthKey = "length";
         public const string Md5ChecksumKey = "md5sum";
@@ -104,7 +106,13 @@ namespace Cassiopeia.Converters
                             var announceItemList = (BEncodedList) announceItem;
 
                             foreach (var announce in announceItemList)
-                                torrent.AddTracker(new Tracker(((BEncodedString) announce).Text));
+                            {
+                                var trackerAddress = ((BEncodedString) announce).Text;
+                                if (trackerAddress.StartsWith("http"))
+                                    torrent.AddTracker(new HttpTracker(new Uri(trackerAddress)));
+                                else if (trackerAddress.StartsWith("udp"))
+                                    torrent.AddTracker(new UdpTracker(new Uri(trackerAddress)));
+                            }
                         }
                         break;
                     case AnnounceKey:
@@ -112,10 +120,26 @@ namespace Cassiopeia.Converters
                         if (dictionary.Keys.Any(s => s.Text == AnnounceListKey))
                             continue;
 
-                        torrent.AddTracker(new Tracker(((BEncodedString) kvp.Value).Text));
+                        var singleTrackerAddress = ((BEncodedString) kvp.Value).Text;
+                        if (singleTrackerAddress.StartsWith("http"))
+                            torrent.AddTracker(new HttpTracker(new Uri(singleTrackerAddress)));
+                        else if (singleTrackerAddress.StartsWith("udp"))
+                            torrent.AddTracker(new UdpTracker(new Uri(singleTrackerAddress)));
                         break;
                     case InfoDictionaryKey:
                         var infoDictionary = (BEncodedDictionary) kvp.Value;
+
+                        using (var sha1Manager = new SHA1Managed())
+                        {
+                            torrent.InfoHash = sha1Manager.ComputeHash(infoDictionary.Encode());
+                        }
+
+                        if (infoDictionary.Keys.Any(s => s.Text == FileListKey) && infoDictionary.Keys.Any(s => s.Text == LengthKey || s.Text == Md5ChecksumKey))
+                        {
+                            throw new BEncodingException("Mixed single and multiple file modes found.");
+                        }
+
+                        var singleModeFile = new FileItem();
                         foreach (var infoKvp in infoDictionary)
                             switch (infoKvp.Key.Text)
                             {
@@ -128,34 +152,49 @@ namespace Cassiopeia.Converters
                                 case PrivateKey:
                                     torrent.IsPrivate = ((BEncodedNumber) infoKvp.Value).Number != 0;
                                     break;
+                                case PiecesKey:
+                                    var pieces = ((BEncodedString) infoKvp.Value).TextBytes;
+                                    if (pieces.Length % 20 != 0)
+                                        throw new BEncodingException("Invalid Info Hash.");
+
+                                    torrent.Pieces = pieces;
+                                    torrent.PieceCount = pieces.Length / 20;
+                                    break;
+                                case LengthKey:
+                                    var singleModeSize = ((BEncodedNumber)infoKvp.Value).Number;
+                                    singleModeFile.Size = singleModeSize;
+                                    torrent.OriginalSize += singleModeSize;
+                                    break;
                                 case FileListKey:
                                     var fileList = (BEncodedList) infoKvp.Value;
                                     foreach (var fileDetails in fileList)
                                     {
-                                        var file = new FileItem();
+                                        var multipleModeFile = new FileItem();
                                         var fileDetailsDictionary = (BEncodedDictionary) fileDetails;
 
                                         foreach (var kvpFileDetails in fileDetailsDictionary)
                                             switch (kvpFileDetails.Key.Text)
                                             {
                                                 case LengthKey:
-                                                    file.Size = ((BEncodedNumber) kvpFileDetails.Value).Number;
+                                                    var multipleModeSize = ((BEncodedNumber) kvpFileDetails.Value).Number;
+                                                    multipleModeFile.Size = multipleModeSize;
+                                                    torrent.OriginalSize += multipleModeSize;
                                                     break;
                                                 case Md5ChecksumKey:
-                                                    file.Md5 = ((BEncodedString) kvpFileDetails.Value).Text;
+                                                    multipleModeFile.Md5 = ((BEncodedString) kvpFileDetails.Value).Text;
                                                     break;
                                                 case PathKey:
                                                     var filePaths = (BEncodedList) kvpFileDetails.Value;
 
                                                     foreach (var path in filePaths)
-                                                        file.Path.Add(((BEncodedString) path).Text);
+                                                        multipleModeFile.Path.Add(((BEncodedString) path).Text);
                                                     break;
                                                 default:
                                                     throw new NotSupportedException(
                                                         $"Unknown metadata key '{kvpFileDetails.Key.Text}' found in Files list.");
                                             }
 
-                                        torrent.AddFile(file);
+                                        torrent.AddFile(multipleModeFile);
                                     }
                                     break;
                                 default:

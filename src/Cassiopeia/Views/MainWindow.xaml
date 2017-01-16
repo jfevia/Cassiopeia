@@ -311,7 +311,7 @@
                           CanUserDeleteRows="False"
                           ItemsSource="{Binding SelectedTorrent.Trackers}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Uri}" Header="Uri" IsReadOnly="True" />
                         <DataGridTextColumn Binding="{Binding Status}" Header="Status" IsReadOnly="True" />
                         <DataGridTextColumn Binding="{Binding Seeders}" Header="Seeders" IsReadOnly="True" />
                         <DataGridTextColumn Binding="{Binding Peers}" Header="Peers" IsReadOnly="True" />

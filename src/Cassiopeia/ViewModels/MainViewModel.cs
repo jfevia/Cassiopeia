@@ -24,10 +24,13 @@ namespace Cassiopeia.ViewModels
         private Torrent _selectedTorrent;
         private ObservableCollection<Session> _sessions;
         private ObservableCollection<Torrent> _torrents;
+        private CassiopeiaSettings _cassiopeiaSettings;
         private string _searchOptionCriteria;
+        private string _currentPeerId;
 
         public MainViewModel()
         {
+            _currentPeerId = "CBT-100XXXXXXXXXXXXX";
             _newTorrents = new ObservableCollection<Torrent>();
             _torrents = new ObservableCollection<Torrent>();
             _sessions = new ObservableCollection<Session>
@@ -103,6 +106,7 @@ namespace Cassiopeia.ViewModels
             _categories = new ObservableCollection<string>();
             _cachedDownloadFolders = new ObservableCollection<string>();
             _cachedCompletedDownloadFolders = new ObservableCollection<string>();
+            _cassiopeiaSettings = new CassiopeiaSettings();
             AddTorrentsDialogCommand = new InputGestureCommand(ShowAddTorrentDialog, "Ctrl+N");
             OptionsDialogCommand = new InputGestureCommand(ShowOptionsDialog, "Ctrl+P");
             OpenFileCommand = new InputGestureCommand(ShowOpenFileDialog, "Ctrl+O");
@@ -180,6 +184,12 @@ namespace Cassiopeia.ViewModels
             set { Set(nameof(SelectedNewTorrent), ref _selectedNewTorrent, value); }
         }
 
+        public string CurrentPeerId
+        {
+            get { return _currentPeerId; }
+            set { Set(nameof(CurrentPeerId), ref _currentPeerId, value); }
+        }
+
         public ObservableCollection<Torrent> NewTorrents
         {
             get { return _newTorrents; }
@@ -190,6 +200,12 @@ namespace Cassiopeia.ViewModels
         {
             get { return _torrents; }
             set { Set(nameof(Torrents), ref _torrents, value); }
+        }
+
+        public CassiopeiaSettings CassiopeiaSettings
+        {
+            get { return _cassiopeiaSettings; }
+            set { Set(nameof(CassiopeiaSettings), ref _cassiopeiaSettings, value); }
         }
 
         private void ShowOptionsDialog()
@@ -209,7 +225,28 @@ namespace Cassiopeia.ViewModels
 
         private void StartSelectedTorrent()
         {
-            throw new NotImplementedException();
+            var announceparameters = new AnnounceParameters
+            {
+                BytesDownloaded = SelectedTorrent.Downloaded,
+                BytesUploaded = SelectedTorrent.Uploaded,
+                Event = TorrentEvent.Started,
+                InfoHash = SelectedTorrent.InfoHash,
+                MaximumPeerCount = _cassiopeiaSettings.MaximumPeerCount,
+                PeerId = CurrentPeerId,
+                RequiresEncryption = _cassiopeiaSettings.RequiresEncryption,
+                SupportsEncryption = true,
+                UseCompactResponse = _cassiopeiaSettings.UseCompactResponse,
+                UserAgent = CurrentPeerId,
+                BytesLeft = SelectedTorrent.OriginalSize
+            };
+
+            if (!string.IsNullOrWhiteSpace(_cassiopeiaSettings.ReportedHostname) && _cassiopeiaSettings.ReportedPort != 0)
+            {
+                announceparameters.IpAddress = _cassiopeiaSettings.ReportedHostname;
+                announceparameters.Port = _cassiopeiaSettings.ReportedPort;
+            }
+
+            SelectedTorrent?.Announce(announceparameters);
         }
 
         private void OnAddTorrents(IDialog dialog)
