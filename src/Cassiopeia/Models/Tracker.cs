@@ -1,25 +1,27 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace Cassiopeia.Models
 {
-    internal class Tracker : ObservableObject
+    internal abstract class Tracker : ObservableObject
     {
         private long _downloaded;
-        private string _name;
+        private Uri _uri;
         private int _peers;
         private int _seeders;
         private TrackerStatus _status;
 
-        public Tracker(string name)
+        protected Tracker(Uri uri)
         {
-            _name = name;
+            _uri = uri;
             _status = TrackerStatus.Working;
         }
 
-        public string Name
+        public Uri Uri
         {
-            get { return _name; }
-            set { Set(nameof(Name), ref _name, value); }
+            get { return _uri; }
+            set { Set(nameof(Uri), ref _uri, value); }
         }
 
         public TrackerStatus Status
@@ -45,5 +47,8 @@ namespace Cassiopeia.Models
             get { return _downloaded; }
             set { Set(nameof(Downloaded), ref _downloaded, value); }
         }
+
+        public abstract void AnnounceAsync(AnnounceParameters parameters);
+        public abstract void ScrapeAsync();
     }
 }
