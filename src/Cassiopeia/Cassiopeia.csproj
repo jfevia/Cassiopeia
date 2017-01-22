@@ -93,6 +93,8 @@
     </ApplicationDefinition>
     <Compile Include="Models\AnnounceParameters.cs" />
     <Compile Include="Models\CassiopeiaSettings.cs" />
+    <Compile Include="Models\Encryption.cs" />
+    <Compile Include="Models\LoggableException.cs" />
     <Compile Include="Models\HttpSeed.cs" />
     <Compile Include="Models\HttpTracker.cs" />
     <Compile Include="Models\Node.cs" />
