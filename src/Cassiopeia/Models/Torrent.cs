@@ -108,9 +108,9 @@ namespace Cassiopeia.Models
             set { Set(nameof(Name), ref _name, value); }
         }
 
-        public ReadOnlyCollection<Peer> Peers
+        public ReadOnlyObservableCollection<Peer> Peers
         {
-            get { return new ReadOnlyCollection<Peer>(_peers); }
+            get { return new ReadOnlyObservableCollection<Peer>(_peers); }
         }
 
         public int PeerCount
@@ -417,7 +417,17 @@ namespace Cassiopeia.Models
         public void Announce(AnnounceParameters announceparameters)
         {
             foreach (var tracker in _trackers)
-                tracker.AnnounceAsync(announceparameters);
+            {
+                tracker.Announced += OnAnnounced;
+                tracker.Announce(announceparameters);
+            }
+        }
+
+        private void OnAnnounced(object sender, AnnounceEventArgs e)
+        {
+            if (e.Peers.Count <= 0) return;
+
+            e.Peers.ForEach(s => _peers.Add(s));
         }
     }
 }

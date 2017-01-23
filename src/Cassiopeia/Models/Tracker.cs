@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 
 namespace Cassiopeia.Models
@@ -7,10 +7,10 @@ namespace Cassiopeia.Models
     internal abstract class Tracker : ObservableObject
     {
         private long _downloaded;
-        private Uri _uri;
         private int _peers;
         private int _seeders;
         private TrackerStatus _status;
+        private Uri _uri;
 
         protected Tracker(Uri uri)
         {
@@ -48,7 +48,14 @@ namespace Cassiopeia.Models
             set { Set(nameof(Downloaded), ref _downloaded, value); }
         }
 
-        public abstract void AnnounceAsync(AnnounceParameters parameters);
-        public abstract void ScrapeAsync();
+        public event EventHandler<AnnounceEventArgs> Announced;
+
+        public abstract void Announce(AnnounceParameters parameters);
+        public abstract void Scrape();
+
+        protected virtual void OnAnnounced(TrackerStatus status, List<Peer> peers)
+        {
+            Announced?.Invoke(this, new AnnounceEventArgs(status, peers));
+        }
     }
 }

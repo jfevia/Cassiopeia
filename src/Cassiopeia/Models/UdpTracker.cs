@@ -8,13 +8,13 @@ namespace Cassiopeia.Models
         {
         }
 
-        public override void AnnounceAsync(AnnounceParameters parameters)
+        public override void Announce(AnnounceParameters parameters)
         {
             // TODO: Implement
             return;
         }
 
-        public override void ScrapeAsync()
+        public override void Scrape()
         {
             // TODO: Implement
             throw new NotImplementedException();

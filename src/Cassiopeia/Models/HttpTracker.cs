@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using Cassiopeia.BitTorrent;
 using Cassiopeia.Collections.ObjectModel;
 using Cassiopeia.Common;
@@ -32,6 +31,7 @@ namespace Cassiopeia.Models
         private const string PeersKey = "peers";
         private const string FailureReasonKey = "failure reason";
         private const string WarningMessageKey = "warning message";
+        private const string CryptoFlagsKey = "crypto_flags";
         private static readonly Random Random = new Random();
         private int _complete;
         private int _incomplete;
@@ -118,29 +118,28 @@ namespace Cassiopeia.Models
             return queryBuilder.ToUri();
         }
 
-        public override async void AnnounceAsync(AnnounceParameters parameters)
+        public override void Announce(AnnounceParameters parameters)
         {
-            await Task.Factory.StartNew(() =>
+            try
             {
-                try
-                {
-                    var announceUri = GetAnnounceUri(parameters);
-                    var request = (HttpWebRequest) WebRequest.Create(announceUri);
-                    request.UserAgent = parameters.UserAgent;
-                    request.Proxy = new WebProxy();
-                    request.BeginGetResponse(EndAnnouncement, new object[] {request, TrackerId});
-                }
-                catch (Exception ex)
-                {
-                    Status = TrackerStatus.Offline;
+                var announceUri = GetAnnounceUri(parameters);
+                var request = (HttpWebRequest) WebRequest.Create(announceUri);
+                request.UserAgent = parameters.UserAgent;
+                request.Proxy = new WebProxy();
+                request.BeginGetResponse(EndAnnouncement, new object[] {request, TrackerId});
+            }
+            catch
 
-                    var exception = new LoggableException();
-                    exception.DateTime = DateTime.Now;
-                    exception.Exception = ex;
+                (Exception ex)
+            {
+                Status = TrackerStatus.Offline;
 
-                    Exceptions.Add(exception);
-                }
-            });
+                var exception = new LoggableException();
+                exception.DateTime = DateTime.Now;
+                exception.Exception = ex;
+
+                Exceptions.Add(exception);
+            }
         }
 
         private BEncodedDictionary DecodeResponse(WebRequest request, IAsyncResult result)
@@ -193,10 +192,14 @@ namespace Cassiopeia.Models
                 Status = TrackerStatus.Offline;
                 throw new Exception("The tracker could not be contacted", webException);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Status = TrackerStatus.InvalidResponse;
                 throw new Exception("The tracker returned an invalid or incomplete response", ex);
+            }
+            finally
+            {
+                OnAnnounced(Status, peers);
             }
         }
 
@@ -232,12 +235,15 @@ namespace Cassiopeia.Models
                         throw new Exception(((BEncodedString) kvp.Value).Text);
                     case WarningMessageKey:
                         throw new Exception(((BEncodedString) kvp.Value).Text);
+                    case CryptoFlagsKey:
+                        // TODO: Add support to know whether the peer supports/requires encryption
+                        break;
                     default:
                         throw new NotImplementedException($"Unknown announce tag received '{kvp.Key.Text}'.");
                 }
         }
 
-        public override async void ScrapeAsync()
+        public override void Scrape()
         {
             // TODO: Implement
             throw new NotImplementedException();

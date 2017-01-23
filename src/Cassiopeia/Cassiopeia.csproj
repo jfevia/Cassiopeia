@@ -91,6 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AnnounceEventArgs.cs" />
     <Compile Include="Models\AnnounceParameters.cs" />
     <Compile Include="Models\CassiopeiaSettings.cs" />
     <Compile Include="Models\Encryption.cs" />
